@@ -6,9 +6,9 @@ import typing
 #Q1
 def json_ver_nx(chemin:str) -> dict:
     with open(chemin, mode="r", encoding="utf-8") as file:
-        file_dict = json.loads(file.read())
-        print(file_dict)
-        
+        json_file = file.read()
+    return json_file   
+
 
 #Q2
 def collaborateurs_communs():
@@ -46,4 +46,5 @@ def centralite_groupe():
 if __name__ == "__main__" :
     chemin = "./other/data.txt"
     print("Hello World")
-    json_ver_nx(chemin)
+    print(json_ver_nx(chemin))
+
