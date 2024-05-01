@@ -65,4 +65,3 @@ if __name__ == "__main__" :
     chemin = "./other/data.txt"
     print("Hello World")
     test = json_ver_nx(chemin)
-
