@@ -28,6 +28,7 @@ def json_ver_nx(chemin:str) -> nx.Graph:
     Graph.add_edges_from(actors_edges)
     print(len(Graph.nodes))
     return Graph
+
 #Q2
 def collaborateurs_communs():
     ...
