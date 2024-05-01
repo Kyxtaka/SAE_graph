@@ -9,6 +9,7 @@ def json_ver_nx(chemin:str) -> dict:
         json_file = file.read()
     return json_file   
 
+
 #Q2
 def collaborateurs_communs():
     ...
@@ -46,3 +47,4 @@ if __name__ == "__main__" :
     chemin = "./other/data.txt"
     print("Hello World")
     print(json_ver_nx(chemin))
+
