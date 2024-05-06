@@ -50,12 +50,20 @@ def distance():
     ...
 
 #Q4
-def centralite():
-    ...
+def centralite(G:nx.Graph, u) -> int:
+    liste_distance = []
+    for acteur in G.nodes:
+        liste_distance.append(distance(G,u,acteur))
+    return max(liste_distance)
 
-def centre_hollywood():
-    ...
-
+def centre_hollywood(G:nx.Graph) -> str:
+    liste_centralite_acteur = []
+    for acteur in G.nodes:
+        tmp_centralite = tuple(acteur, centralite(G,acteur))
+        liste_centralite_acteur.append(tmp_centralite)
+    acteur_centrale = min(liste_centralite_acteur, key=lambda acteur: acteur[1])
+    return acteur_centrale[0]
+    
 #Q5
 def eloignement_max():
     ...
