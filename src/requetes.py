@@ -29,8 +29,12 @@ def json_ver_nx(chemin:str) -> nx.Graph:
     print(len(Graph.nodes))
     return Graph
 #Q2
-def collaborateurs_communs():
-    ...
+def collaborateurs_communs(graph, acteur1, acteur2):
+    ens_commun = set()
+    for collab in graph.adj[acteur1]:
+        if collab in graph.adj[acteur2]:
+            ens_commun.add(collab)
+    return ens_commun
 
 #Q3 
 def collaborateurs_proches():
@@ -62,6 +66,8 @@ def centralite_groupe():
 
 #Juste la pour test au fur et a mesure
 if __name__ == "__main__" :
-    chemin = "./other/data.txt"
+    chemin = "/home/pierre/Ecole/Ecole/iut/SAE/SAE_graph/SAE_graph/other/data.txt"
     print("Hello World")
     test = json_ver_nx(chemin)
+    #print(test.nodes)
+    collaborateurs_communs(test,"Sophie Marceau","Filipe Ferrer")
