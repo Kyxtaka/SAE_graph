@@ -66,7 +66,7 @@ def centralite_groupe():
 
 #Juste la pour test au fur et a mesure
 if __name__ == "__main__" :
-    chemin = "/home/pierre/Ecole/Ecole/iut/SAE/SAE_graph/SAE_graph/other/data.txt"
+    chemin = "./other/data.txt"
     print("Hello World")
     test = json_ver_nx(chemin)
     #print(test.nodes)
