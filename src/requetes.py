@@ -66,11 +66,29 @@ def est_proche(G ,acteur1, acteur2, k):
         return acteur2 in collab
     return None
 
-def distance_naive():
-    ...
+def distance_naive(G ,acteur1, acteur2):
+    k=0
+    while est_proche(G ,acteur1, acteur2,k) is not True:
+        k+=1
+    return k
 
-def distance():
-    ...
+def distance(G ,acteur1, acteur2):
+    if acteur1 not in G.nodes:
+        print(acteur1,"est un illustre inconnu")
+        return None
+    collaborateurs = set()
+    collaborateurs.add(acteur1)
+    print(collaborateurs)
+    distance = 0
+    while acteur2 not in collaborateurs:
+        distance += 1
+        collaborateurs_directs = set()
+        for c in collaborateurs:
+            for voisin in G.adj[c]:
+                if voisin not in collaborateurs:
+                    collaborateurs_directs.add(voisin)
+        collaborateurs = collaborateurs.union(collaborateurs_directs)
+    return distance
 
 #Q4
 def centralite():
