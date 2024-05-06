@@ -60,8 +60,11 @@ def collaborateurs_proches(G,u,k):
         collaborateurs = collaborateurs.union(collaborateurs_directs)
     return collaborateurs
 
-def est_proche():
-    ...
+def est_proche(G ,acteur1, acteur2, k):
+    collab = collaborateurs_proches(G,acteur1,k)
+    if collab != None:
+        return acteur2 in collab
+    return None
 
 def distance_naive():
     ...
