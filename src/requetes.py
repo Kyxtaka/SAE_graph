@@ -1,7 +1,8 @@
 #fichier où seront implémenter les requêtes python
 import json
 import networkx as nx
-import typing
+import itertools
+
 
 #Q1
 def json_ver_nx(chemin:str) -> nx.Graph:
@@ -21,7 +22,7 @@ def json_ver_nx(chemin:str) -> nx.Graph:
                 actorname_2 = actorname_2.translate({ord(i): None for i in "[]'"})
                 actors_list.add(actorName_1)
                 actors_edges.add((actorName_1,actorname_2))
-    print(actors_edges)
+    #print(actors_edges)
     # print(len(actors))
     print(len(actors_edges))
     Graph = nx.Graph()
@@ -31,22 +32,27 @@ def json_ver_nx(chemin:str) -> nx.Graph:
 
 def json_ver_nx2(chemin:str):
     with open(chemin, mode="r", encoding="utf-8") as file:
-        H = nx.Graph()
+        G = nx.Graph()
         for line in file:
             acteurs = json.loads(line)["cast"]
             #print(acteurs)
             acteurs2 = []
             for charac in acteurs:
                 acteurs2.append(charac.strip("[]"))
-            print(acteurs2)
-            for acteur in acteurs2:
-                H.add_edges_from((acteur,i) for i in acteurs2)
-            print(H.edges)
-
-            #print(list(G.nodes))
+            #for acteur in acteurs2:
+            #    for i in acteurs2:
+            #       if i != acteur:
+            #           G.add_edge(acteur,i)
+            #permet de gagner un peu plus de 10s
+            G.add_edges_from(itertools.combinations(acteurs2,2))
+            
                 
+        print(len(G.edges))
+        print(len(G.nodes))
+        
+             
 
-            break
+            
 
             
 #Q2
@@ -71,7 +77,7 @@ def collaborateurs_proches(G,u,k):
         return None
     collaborateurs = set()
     collaborateurs.add(u)
-    print(collaborateurs)
+    #print(collaborateurs)
     for i in range(k):
         collaborateurs_directs = set()
         for c in collaborateurs:
@@ -99,7 +105,7 @@ def distance(G ,acteur1, acteur2):
         return None
     collaborateurs = set()
     collaborateurs.add(acteur1)
-    print(collaborateurs)
+    #print(collaborateurs)
     distance = 0
     while acteur2 not in collaborateurs:
         distance += 1
@@ -141,8 +147,11 @@ def centralite_groupe():
 
 #Juste la pour test au fur et a mesure
 if __name__ == "__main__" :
-    chemin = "./other/data_100.txt"
+    chemin = "./other/data.txt"
     print("Hello World")
     test = json_ver_nx2(chemin)
-    #print(test.nodes)
-    #collaborateurs_communs(test,"Sophie Marceau","Filipe Ferrer")
+
+    
+    
+    
+ 
