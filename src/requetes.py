@@ -21,13 +21,34 @@ def json_ver_nx(chemin:str) -> nx.Graph:
                 actorname_2 = actorname_2.translate({ord(i): None for i in "[]'"})
                 actors_list.add(actorName_1)
                 actors_edges.add((actorName_1,actorname_2))
-    # print(actors_edges)
+    print(actors_edges)
     # print(len(actors))
     print(len(actors_edges))
     Graph = nx.Graph()
     Graph.add_edges_from(actors_edges)
     print(len(Graph.nodes))
     return Graph
+
+def json_ver_nx2(chemin:str):
+    with open(chemin, mode="r", encoding="utf-8") as file:
+        H = nx.Graph()
+        for line in file:
+            acteurs = json.loads(line)["cast"]
+            #print(acteurs)
+            acteurs2 = []
+            for charac in acteurs:
+                acteurs2.append(charac.strip("[]"))
+            print(acteurs2)
+            for acteur in acteurs2:
+                H.add_edges_from((acteur,i) for i in acteurs2)
+            print(H.edges)
+
+            #print(list(G.nodes))
+                
+
+            break
+
+            
 #Q2
 def collaborateurs_communs(graph, acteur1, acteur2):
     ens_commun = set()
@@ -106,8 +127,13 @@ def centre_hollywood(G:nx.Graph) -> str:
     return acteur_centrale[0]
     
 #Q5
-def eloignement_max():
-    ...
+def eloignement_max(G:nx.Graph):
+    distance_max = 0
+    for acteur in G.nodes:
+        c = centralite(G, acteur)
+        if c[1] > distance_max:
+            distance_max = c[1]
+    return distance_max
 
 #Bonus
 def centralite_groupe():
@@ -115,8 +141,8 @@ def centralite_groupe():
 
 #Juste la pour test au fur et a mesure
 if __name__ == "__main__" :
-    chemin = "./other/data.txt"
+    chemin = "./other/data_100.txt"
     print("Hello World")
-    test = json_ver_nx(chemin)
+    test = json_ver_nx2(chemin)
     #print(test.nodes)
-    collaborateurs_communs(test,"Sophie Marceau","Filipe Ferrer")
+    #collaborateurs_communs(test,"Sophie Marceau","Filipe Ferrer")
