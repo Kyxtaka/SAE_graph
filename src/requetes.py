@@ -2,6 +2,7 @@
 import json
 import networkx as nx
 import itertools
+import time
 
 
 #Q1
@@ -24,6 +25,9 @@ def json_ver_nx(chemin:str):
                 
         print(len(G.edges))
         print(len(G.nodes))
+    return G
+
+
         
              
 
@@ -47,6 +51,7 @@ def collaborateurs_proches(G,u,k):
         u: le sommet de départ
         k: la distance depuis u
     """
+   
     if u not in G.nodes:
         print(u,"est un illustre inconnu")
         return None
@@ -75,12 +80,12 @@ def distance_naive(G ,acteur1, acteur2):
     return k
 
 def distance(G ,acteur1, acteur2):
+
     if acteur1 not in G.nodes:
         print(acteur1,"est un illustre inconnu")
         return None
     collaborateurs = set()
     collaborateurs.add(acteur1)
-    #print(collaborateurs)
     distance = 0
     while acteur2 not in collaborateurs:
         distance += 1
@@ -93,11 +98,30 @@ def distance(G ,acteur1, acteur2):
     return distance
 
 #Q4
-def centralite(G:nx.Graph, u) -> int:
-    liste_distance = []
-    for acteur in G.nodes:
-        liste_distance.append(distance(G,u,acteur))
-    return max(liste_distance)
+def centralite(G,u):
+    collaborateurs = set()
+    collaborateurs.add(u)
+    #print(collaborateurs)
+    distance = 0
+    lenG = len(G.nodes)
+    #print(lenG)
+    while len(collaborateurs) < lenG:
+        #print(distance)
+        #print(len(collaborateurs))
+        collaborateurs_directs = set()
+        for c in collaborateurs:
+            for voisin in G.adj[c]:
+                if voisin not in collaborateurs:
+                    collaborateurs_directs.add(voisin)
+        if collaborateurs_directs == set():
+            return distance
+        distance += 1
+        collaborateurs = collaborateurs.union(collaborateurs_directs)
+
+    return distance
+
+
+    
 
 def centre_hollywood(G:nx.Graph) -> str:
     liste_centralite_acteur = []
@@ -124,8 +148,15 @@ def centralite_groupe():
 if __name__ == "__main__" :
     chemin = "./other/data.txt"
     print("Hello World")
-    test = json_ver_nx2(chemin)
+    test = json_ver_nx(chemin)
+    #print(distance(test,"Frank Vincent","Iraj Safavi"))
+    #print(centralite(test,"Frank Vincent"))
+    print(centre_hollywood(test))
+    #print(test.nodes)
+    #print(test.edges)
 
+            
+    
     
     
     
