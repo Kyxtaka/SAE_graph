@@ -1,5 +1,6 @@
 #fichier où seront implémenter les requêtes python
 import json
+import random
 import networkx as nx
 import itertools
 import time
@@ -105,7 +106,7 @@ def distance2(G:nx.Graph,node1:str, node2:str ) -> int:
         return None
 
 #Q4
-def centralite(G,u):
+def centralite3(G,u):
     collaborateurs = set()
     collaborateurs.add(u)
     #print(collaborateurs)
@@ -137,7 +138,26 @@ def centralite2(G:nx.Graph,actor:str) -> int:
         # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
     return max(distances_paths)
 
-
+def centralite(G,actor,dis_min=None):
+    distance = 0
+    en_cour = G.adj[actor]
+    set_actor_pass = {actor}
+    acteur_plus_loins = set()
+    while en_cour != set():
+        if dis_min == distance:
+            return acteur_plus_loins
+        voisin = set()
+        for acteur in en_cour:
+            for acteur_v in G.adj[acteur]:
+                if acteur_v not in set_actor_pass:
+                    voisin.add(acteur_v)
+        set_actor_pass = set_actor_pass.union(en_cour)
+        acteur_plus_loins = en_cour
+        en_cour = voisin
+        if en_cour == set():
+            return distance
+        distance += 1
+    return distance
 
     
 
@@ -150,26 +170,27 @@ def centre_hollywood(G:nx.Graph) -> str:
     return acteur_centrale[0]
 
 
-def centre_hollywood2(G:nx.Graph) -> str:
+def centre_hollywood2(G):
     dist_min = None
-    actor_pass = set()
-    for acteur in G.nodes:
-        if acteur not in actor_pass:
-            actor_pass.add(acteur)
-
-            dist_max = centralite(G,acteur)
-            if dist_min == None:
-                dist_min = dist_max
-            dist_mid = dist_max // 2
-
-            for acteur_mid in collaborateurs_proches(G,acteur,dist_mid):
-                if acteur_mid not in actor_pass:
-                    dist_acteur_mid = centralite(G,acteur_mid)
-                    actor_pass.add(acteur_mid)
-                    if dist_acteur_mid < dist_min:
-                        dist_min = dist_acteur_mid
-    return dist_min
-    
+    ens_acteur = G.copy()
+    i=0
+    while ens_acteur != set():
+        acteur = random.choice(list(ens_acteur))
+        ens_acteur.remove_node(acteur)
+        i+=1
+        dist_act = centralite(G,acteur,dist_min)
+            
+        if type(dist_act) == type(set()):
+            for act in dist_act:
+                if act in ens_acteur:
+                    ens_acteur.remove_node(act)
+            print(len(ens_acteur))
+            print(i)
+        elif dist_min == None  or dist_act < dist_min:
+            acteur_central = acteur
+            dist_min = dist_act
+        
+    return (acteur_central, dist_min)
 #Q5
 def eloignement_max(G:nx.Graph):
     distance_max = 0
@@ -190,8 +211,12 @@ if __name__ == "__main__" :
     test = json_ver_nx(chemin)
     #print(distance(test,"Frank Vincent","Iraj Safavi"))
     #print(centralite(test,"Frank Vincent"))
-    print(distance2(test,"Frank Vincent","Iraj Safavi"))
-    print(centralite2(test,"Frank Vincent"))
+    t = time.time()
+    print(centre_hollywood2(test))
+    print(time.time()-t)
+    #t = time.time()
+    #print(centre_hollywood2(test))
+    #print(time.time()-t)
 
     #print(test.nodes)
     #print(test.edges)
