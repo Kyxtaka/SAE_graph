@@ -97,6 +97,10 @@ def distance(G ,acteur1, acteur2):
         collaborateurs = collaborateurs.union(collaborateurs_directs)
     return distance
 
+def distance2(G:nx.Graph,node1:str, node2:str ) -> int:
+    lenght = nx.shortest_path_length(G, node1,node2)
+    return lenght
+
 #Q4
 def centralite(G,u):
     collaborateurs = set()
@@ -126,7 +130,7 @@ def centralite(G,u):
 def centre_hollywood(G:nx.Graph) -> str:
     liste_centralite_acteur = []
     for acteur in G.nodes:
-        tmp_centralite = tuple(acteur, centralite(G,acteur))
+        tmp_centralite = (acteur, centralite(G,acteur))
         liste_centralite_acteur.append(tmp_centralite)
     acteur_centrale = min(liste_centralite_acteur, key=lambda acteur: acteur[1])
     return acteur_centrale[0]
@@ -151,7 +155,7 @@ if __name__ == "__main__" :
     test = json_ver_nx(chemin)
     #print(distance(test,"Frank Vincent","Iraj Safavi"))
     #print(centralite(test,"Frank Vincent"))
-    print(centre_hollywood(test))
+    print(distance2(test,"Frank Vincent","Iraj Safavi"))
     #print(test.nodes)
     #print(test.edges)
 
