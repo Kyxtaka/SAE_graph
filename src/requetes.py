@@ -148,6 +148,27 @@ def centre_hollywood(G:nx.Graph) -> str:
         liste_centralite_acteur.append(tmp_centralite)
     acteur_centrale = min(liste_centralite_acteur, key=lambda acteur: acteur[1])
     return acteur_centrale[0]
+
+
+def centre_hollywood2(G:nx.Graph) -> str:
+    dist_min = None
+    actor_pass = set()
+    for acteur in G.nodes:
+        if acteur not in actor_pass:
+            actor_pass.add(acteur)
+
+            dist_max = centralite(G,acteur)
+            if dist_min == None:
+                dist_min = dist_max
+            dist_mid = dist_max // 2
+
+            for acteur_mid in collaborateurs_proches(G,acteur,dist_mid):
+                if acteur_mid not in actor_pass:
+                    dist_acteur_mid = centralite(G,acteur_mid)
+                    actor_pass.add(acteur_mid)
+                    if dist_acteur_mid < dist_min:
+                        dist_min = dist_acteur_mid
+    return dist_min
     
 #Q5
 def eloignement_max(G:nx.Graph):
