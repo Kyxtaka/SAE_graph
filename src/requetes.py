@@ -137,6 +137,23 @@ def centralite2(G:nx.Graph,actor:str) -> int:
         # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
     return max(distances_paths)
 
+def centralite3(G,actor):
+    distance = 0
+    en_cour = G.adj[actor]
+    set_actor_pass = {actor}
+    while en_cour != set():
+        voisin = set()
+        for acteur in en_cour:
+            for acteur_v in G.adj[acteur]:
+                if acteur_v not in set_actor_pass:
+                    voisin.add(acteur_v)
+        set_actor_pass = set_actor_pass.union(en_cour)
+        en_cour = voisin
+        if en_cour == set():
+            return distance
+        distance += 1
+    return distance
+
 
 
     
@@ -169,8 +186,13 @@ if __name__ == "__main__" :
     test = json_ver_nx(chemin)
     #print(distance(test,"Frank Vincent","Iraj Safavi"))
     #print(centralite(test,"Frank Vincent"))
-    print(distance2(test,"Frank Vincent","Iraj Safavi"))
-    print(centralite2(test,"Frank Vincent"))
+    #t=time.time()
+    #print(centralite(test,"Frank Vincent"))
+    #print(time.time()-t)
+    t=time.time()
+    print(centralite3(test,"Frank Vincent"))
+    print(time.time()-t)
+    
 
     #print(test.nodes)
     #print(test.edges)
