@@ -171,6 +171,7 @@ if __name__ == "__main__" :
     #print(centralite(test,"Frank Vincent"))
     print(distance2(test,"Frank Vincent","Iraj Safavi"))
     print(centralite2(test,"Frank Vincent"))
+
     #print(test.nodes)
     #print(test.edges)
 
