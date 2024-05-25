@@ -98,8 +98,11 @@ def distance(G ,acteur1, acteur2):
     return distance
 
 def distance2(G:nx.Graph,node1:str, node2:str ) -> int:
-    lenght = nx.shortest_path_length(G, node1,node2)
-    return lenght
+    try:
+        lenght = nx.shortest_path_length(G, node1,node2)
+        return lenght
+    except nx.NetworkXNoPath:
+        return None
 
 #Q4
 def centralite(G,u):
@@ -123,6 +126,17 @@ def centralite(G,u):
         collaborateurs = collaborateurs.union(collaborateurs_directs)
 
     return distance
+
+def centralite2(G:nx.Graph,actor:str) -> int:
+    distances_paths = set()
+    actor_to_check = set(node for node in G.nodes)
+    actor_to_check.remove(actor)
+    for node in actor_to_check:
+        lenght=distance2(G, actor,node)
+        if lenght != None :distances_paths.add(lenght)
+        # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
+    return max(distances_paths)
+
 
 
     
@@ -156,6 +170,8 @@ if __name__ == "__main__" :
     #print(distance(test,"Frank Vincent","Iraj Safavi"))
     #print(centralite(test,"Frank Vincent"))
     print(distance2(test,"Frank Vincent","Iraj Safavi"))
+    print(centralite2(test,"Frank Vincent"))
+
     #print(test.nodes)
     #print(test.edges)
 
