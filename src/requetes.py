@@ -154,9 +154,30 @@ def centralite3(G,actor):
         distance += 1
     return distance
 
-
-
+def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
+    max_distance:int = 0
+    actor_to_check = set(node for node in G.nodes)
+    actor_to_check.remove(actor)
     
+    for node in actor_to_check:
+        keys = [(actor, node), (node, actor)]
+        argument_dict_keys =  argument_dict.keys()
+        if keys[0] in argument_dict_keys or keys[1] in argument_dict_keys:
+            if max_distance < argument_dict[keys[0]]: max_distance = argument_dict[keys[0]]
+        else: 
+            lenght = distance2(G, actor, node)
+            if lenght != None:
+                for key in keys:
+                    argument_dict[key] = lenght
+                if max_distance < lenght: max_distance = argument_dict[keys[0]]
+        # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
+    return argument_dict,max_distance
+    
+
+
+
+
+
 
 def centre_hollywood(G:nx.Graph) -> str:
     liste_centralite_acteur = []
@@ -184,22 +205,25 @@ if __name__ == "__main__" :
     chemin = "./other/data.txt"
     print("Hello World")
     test = json_ver_nx(chemin)
-    #print(distance(test,"Frank Vincent","Iraj Safavi"))
+    
     #print(centralite(test,"Frank Vincent"))
     #t=time.time()
     #print(centralite(test,"Frank Vincent"))
     #print(time.time()-t)
     t=time.time()
-    print(centralite3(test,"Frank Vincent"))
+    argument_dict= dict()
+    result = centralite4(test,"Frank Vincent",argument_dict)
+    print(result[1])
+    # print(distance2(test,"Frank Vincent","Iraj Safavi"))
     print(time.time()-t)
     
 
     #print(test.nodes)
     #print(test.edges)
 
-            
-    
-    
-    
+
+
+
+
     
  
