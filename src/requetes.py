@@ -173,6 +173,7 @@ def centralite5(G,actor):
         distance += 1
     return (distance, actor, random.choice(list(en_cour)))
 
+
 def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
     max_distance:int = 0
     actor_to_check = set(node for node in G.nodes)
@@ -219,26 +220,22 @@ def centre_hollywood(G:nx.Graph) -> str:
     return acteur_centrale[0]
 
 def centre_hollywood3(G):
-    print("a")
     random_actor = random.choice(list(G.nodes))
     c1 = centralite5(G, random_actor)
-    print("b")
     c2  = centralite5(G, c1[2])
     index = c2[0] // 2
-    print("c")
     li_central = set()
 
     index += 1
     collab_fin = collaborateurs_proches(G, c1[2], index)
     collab_deb = collaborateurs_proches(G,c2[2], index)
-    print("d")
-    i = 0
     for acteur in collab_fin:
-        for acteur2 in collab_deb:
-            if acteur == acteur2:
-                i+=1
-                print(i) 
-    return min(li_central, key=lambda acteur : acteur[0])
+        if acteur in collab_deb:
+            li_central.add(acteur)
+    return li_central
+
+
+
     
 
 
@@ -268,8 +265,19 @@ if __name__ == "__main__" :
     t=time.time()
     #print(centralite5(test,"Sissy Spacek"))
     #print(centralite(test,"Kristoff St. John"))
-    print(centre_hollywood3(test))
-    
+    ens_centre_act = centre_hollywood3(test)
+    while len(ens_centre_act) > 100:
+        a = centre_hollywood3(test)
+        b = ens_centre_act.copy()
+        ens_centre_act = set()
+        for acteur_a in  a:
+            if acteur_a in b:
+                ens_centre_act.add(acteur_a)
+        print(len(ens_centre_act))
+    if len(ens_centre_act) == 0:
+        print(len(acteur_a))
+    print(len(ens_centre_act))
+
     
     #result = centralite5(test,"Frank Vincent")
     #print(result)
