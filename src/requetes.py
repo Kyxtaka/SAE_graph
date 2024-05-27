@@ -173,8 +173,15 @@ def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
         # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
     return argument_dict,max_distance
     
-
-
+def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
+    # test = nx.single_source_dijkstra_path(G, actor)
+    test2 = nx.single_source_dijkstra_path_length(G, actor)
+    # test =  nx.single_source_dijkstra(G,actor) 
+    max_distance = max(test2.values())
+    res = list()
+    for key in test2.keys():
+        if test2[key] == max_distance: res.append(key)
+    return (actor, res[-1], max_distance)
 
 
 
@@ -211,9 +218,8 @@ if __name__ == "__main__" :
     #print(centralite(test,"Frank Vincent"))
     #print(time.time()-t)
     t=time.time()
-    argument_dict= dict()
-    result = centralite4(test,"Frank Vincent",argument_dict)
-    print(result[1])
+    result = centralite6(test,"Frank Vincent")
+    print(result)
     # print(distance2(test,"Frank Vincent","Iraj Safavi"))
     print(time.time()-t)
     
