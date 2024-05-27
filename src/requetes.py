@@ -226,8 +226,8 @@ def centre_hollywood3(G):
     index = c2[0] // 2
     li_central = set()
 
-    index += 1
-    collab_fin = collaborateurs_proches(G, c1[2], index)
+    
+    collab_fin = collaborateurs_proches(G, c1[2], index+1)
     collab_deb = collaborateurs_proches(G,c2[2], index)
     for acteur in collab_fin:
         if acteur in collab_deb:
@@ -266,6 +266,7 @@ if __name__ == "__main__" :
     #print(centralite5(test,"Sissy Spacek"))
     #print(centralite(test,"Kristoff St. John"))
     ens_centre_act = centre_hollywood3(test)
+    print("a")
     for i in ens_centre_act:
         print(centralite5(test,i))
 
