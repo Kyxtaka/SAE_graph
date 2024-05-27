@@ -3,6 +3,7 @@ import json
 import networkx as nx
 import itertools
 import time
+import random
 
 
 #Q1
@@ -154,6 +155,24 @@ def centralite3(G,actor):
         distance += 1
     return distance
 
+def centralite5(G,actor):
+    distance = 0
+    en_cour = G.adj[actor]
+    set_actor_pass = {actor}
+    while en_cour != set():
+        voisin = set()
+        for acteur in en_cour:
+            for acteur_v in G.adj[acteur]:
+                if acteur_v not in set_actor_pass:
+                    voisin.add(acteur_v)
+        set_actor_pass = set_actor_pass.union(en_cour)
+        old_en_cour = en_cour
+        en_cour = voisin
+        if en_cour == set():
+            return (distance, actor, random.choice(list(old_en_cour)))
+        distance += 1
+    return (distance, actor, random.choice(list(en_cour)))
+
 def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
     max_distance:int = 0
     actor_to_check = set(node for node in G.nodes)
@@ -211,9 +230,9 @@ if __name__ == "__main__" :
     #print(centralite(test,"Frank Vincent"))
     #print(time.time()-t)
     t=time.time()
-    argument_dict= dict()
-    result = centralite4(test,"Frank Vincent",argument_dict)
-    print(result[1])
+    print(distance2(test,"Frank Vincent", "Two pupils' fathers"))
+    #result = centralite5(test,"Frank Vincent")
+    #print(result)
     # print(distance2(test,"Frank Vincent","Iraj Safavi"))
     print(time.time()-t)
     
