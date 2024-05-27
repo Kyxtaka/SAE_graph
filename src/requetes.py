@@ -197,14 +197,12 @@ def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
 
 
 def centre_hollywood(G:nx.Graph) -> str:
-    liste_centralite_acteur = []
-    for acteur in G.nodes:
-        tmp_centralite = (acteur, centralite(G,acteur))
-        liste_centralite_acteur.append(tmp_centralite)
-    acteur_centrale = min(liste_centralite_acteur, key=lambda acteur: acteur[1])
-    return acteur_centrale[0]
- 
-
+    node_au_pif =  "Al Pacino"
+    all_node = [node for node in G.nodes]
+    c1 = centralite6(G,node_au_pif)
+    c2 = centralite6(G,c1[1])
+    centrale_index = c2[2]//2
+    return all_node[centrale_index], centrale_index
 
 #Q5
 def eloignement_max(G:nx.Graph):
@@ -214,7 +212,7 @@ def eloignement_max(G:nx.Graph):
         if c[1] > distance_max:
             distance_max = c[1]
     return distance_max
-
+    
 #Bonus
 def centralite_groupe():
     ...
@@ -235,6 +233,11 @@ if __name__ == "__main__" :
     #print(distance2(test,"Frank Vincent", "Two pupils' fathers"))
     #result = centralite5(test,"Frank Vincent")
     #print(result)
+    # c1 = centralite6(test,"Al Pacino")
+    # c2 = centralite6(test,c1[1])
+    # index = c2[2]//2
+    # print("centralite x2",c2[2])
+    print(centre_hollywood(test))
     # print(distance2(test,"Frank Vincent","Iraj Safavi"))
     print(time.time()-t)
     

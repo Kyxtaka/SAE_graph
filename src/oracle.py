@@ -4,7 +4,7 @@ import json
 
 
 #constant
-json_file_dir = ""
+json_file_dir = "./other/data.txt"
 #function
 def load_json(path):
     return 
