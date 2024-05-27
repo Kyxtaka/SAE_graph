@@ -3,6 +3,7 @@ import json
 import networkx as nx
 import itertools
 import time
+import random
 
 
 #Q1
@@ -26,14 +27,7 @@ def json_ver_nx(chemin:str):
         print(len(G.edges))
         print(len(G.nodes))
     return G
-
-
-        
-             
-
-            
-
-            
+          
 #Q2
 def collaborateurs_communs(graph, acteur1, acteur2):
     ens_commun = set()
@@ -173,6 +167,24 @@ def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
         # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
     return argument_dict,max_distance
     
+def centralite5(G,actor):
+    distance = 0
+    en_cour = G.adj[actor]
+    set_actor_pass = {actor}
+    while en_cour != set():
+        voisin = set()
+        for acteur in en_cour:
+            for acteur_v in G.adj[acteur]:
+                if acteur_v not in set_actor_pass:
+                    voisin.add(acteur_v)
+        set_actor_pass = set_actor_pass.union(en_cour)
+        old_en_cour = en_cour
+        en_cour = voisin
+        if en_cour == set():
+            return (distance, actor, random.choice(list(old_en_cour)))
+        distance += 1
+    return (distance, actor, random.choice(list(en_cour)))
+
 def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
     # test = nx.single_source_dijkstra_path(G, actor)
     test2 = nx.single_source_dijkstra_path_length(G, actor)
@@ -184,8 +196,6 @@ def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
     return (actor, res[-1], max_distance)
 
 
-
-
 def centre_hollywood(G:nx.Graph) -> str:
     liste_centralite_acteur = []
     for acteur in G.nodes:
@@ -193,7 +203,9 @@ def centre_hollywood(G:nx.Graph) -> str:
         liste_centralite_acteur.append(tmp_centralite)
     acteur_centrale = min(liste_centralite_acteur, key=lambda acteur: acteur[1])
     return acteur_centrale[0]
-    
+ 
+
+
 #Q5
 def eloignement_max(G:nx.Graph):
     distance_max = 0
@@ -218,8 +230,11 @@ if __name__ == "__main__" :
     #print(centralite(test,"Frank Vincent"))
     #print(time.time()-t)
     t=time.time()
-    result = centralite6(test,"Frank Vincent")
-    print(result)
+    #result = centralite6(test,"Frank Vincent")
+    #print(result)
+    #print(distance2(test,"Frank Vincent", "Two pupils' fathers"))
+    #result = centralite5(test,"Frank Vincent")
+    #print(result)
     # print(distance2(test,"Frank Vincent","Iraj Safavi"))
     print(time.time()-t)
     
