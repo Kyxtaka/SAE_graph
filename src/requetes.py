@@ -191,21 +191,58 @@ def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
                 if max_distance < lenght: max_distance = argument_dict[keys[0]]
         # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
     return argument_dict,max_distance
-    
 
 
 
+
+
+def parcours(G, depart):
+    pile = [depart]
+    atteint = [depart]
+    while (len(pile)>0):
+        noeud_courant = pile.pop()
+        print(noeud_courant)
+        for voisin in G[noeud_courant]:
+            if not voisin in atteint:
+                pile.append(voisin)
+                atteint.append(voisin)
+        return atteint
 
 
 
 def centre_hollywood(G:nx.Graph) -> str:
     liste_centralite_acteur = []
     for acteur in G.nodes:
-        tmp_centralite = (acteur, centralite(G,acteur))
+        tmp_centralite = (acteur, centralite5(G,acteur)[0])
         liste_centralite_acteur.append(tmp_centralite)
     acteur_centrale = min(liste_centralite_acteur, key=lambda acteur: acteur[1])
     return acteur_centrale[0]
+
+def centre_hollywood3(G):
+    random_actor = random.choice(list(G.nodes))
+    c1 = centralite5(G, random_actor)
+    c2  = centralite5(G, c1[2])
+    index = c2[0] // 2
+
+    li_central = set()
+    collab_fin = collaborateurs_proches(G, c1[2], index)
+    collab_deb = collaborateurs_proches(G,c2[2], index)
+    for acteur in collab_fin:
+        for acteur2 in collab_deb:
+            if acteur == acteur2:
+                return acteur
+    index += 1
+    collab_fin = collaborateurs_proches(G, c1[2], index)
+    collab_deb = collaborateurs_proches(G,c2[2], index)
+    for acteur in collab_fin:
+        for acteur2 in collab_deb:
+            if acteur == acteur2:
+                li_central.add(centralite5(G,acteur))
+                
+    return min(li_central, key=lambda acteur : acteur[0])
     
+
+
 #Q5
 def eloignement_max(G:nx.Graph):
     distance_max = 0
@@ -230,7 +267,11 @@ if __name__ == "__main__" :
     #print(centralite(test,"Frank Vincent"))
     #print(time.time()-t)
     t=time.time()
-    print(distance2(test,"Frank Vincent", "Two pupils' fathers"))
+    #print(centralite5(test,"Sissy Spacek"))
+    #print(centralite(test,"Kristoff St. John"))
+    print(centre_hollywood3(test))
+    
+    
     #result = centralite5(test,"Frank Vincent")
     #print(result)
     # print(distance2(test,"Frank Vincent","Iraj Safavi"))
