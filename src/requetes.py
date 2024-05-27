@@ -219,26 +219,25 @@ def centre_hollywood(G:nx.Graph) -> str:
     return acteur_centrale[0]
 
 def centre_hollywood3(G):
+    print("a")
     random_actor = random.choice(list(G.nodes))
     c1 = centralite5(G, random_actor)
+    print("b")
     c2  = centralite5(G, c1[2])
     index = c2[0] // 2
-
+    print("c")
     li_central = set()
-    collab_fin = collaborateurs_proches(G, c1[2], index)
-    collab_deb = collaborateurs_proches(G,c2[2], index)
-    for acteur in collab_fin:
-        for acteur2 in collab_deb:
-            if acteur == acteur2:
-                return acteur
+
     index += 1
     collab_fin = collaborateurs_proches(G, c1[2], index)
     collab_deb = collaborateurs_proches(G,c2[2], index)
+    print("d")
+    i = 0
     for acteur in collab_fin:
         for acteur2 in collab_deb:
             if acteur == acteur2:
-                li_central.add(centralite5(G,acteur))
-                
+                i+=1
+                print(i) 
     return min(li_central, key=lambda acteur : acteur[0])
     
 
