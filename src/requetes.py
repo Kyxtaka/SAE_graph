@@ -266,17 +266,8 @@ if __name__ == "__main__" :
     #print(centralite5(test,"Sissy Spacek"))
     #print(centralite(test,"Kristoff St. John"))
     ens_centre_act = centre_hollywood3(test)
-    while len(ens_centre_act) > 100:
-        a = centre_hollywood3(test)
-        b = ens_centre_act.copy()
-        ens_centre_act = set()
-        for acteur_a in  a:
-            if acteur_a in b:
-                ens_centre_act.add(acteur_a)
-        print(len(ens_centre_act))
-    if len(ens_centre_act) == 0:
-        print(len(acteur_a))
-    print(len(ens_centre_act))
+    for i in ens_centre_act:
+        print(centralite5(test,i))
 
     
     #result = centralite5(test,"Frank Vincent")
