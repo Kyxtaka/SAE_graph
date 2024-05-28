@@ -193,42 +193,16 @@ def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
         # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
     return argument_dict,max_distance
 
-def centralite7(G,actor,deja_passe=set()):
-    distance = 0
-    en_cour = G.adj[actor]
-    set_actor_pass = {actor}
-    
-    deja_passe_.add((distance, actor))
-    while en_cour != set():
-        voisin = set()
-        for acteur in en_cour:
-            for acteur_v in G.adj[acteur]:
-                if acteur_v not in set_actor_pass:
-                    voisin.add(acteur_v)
-        set_actor_pass = set_actor_pass.union(en_cour)
-        en_cour = voisin
-        if en_cour == set():
-            return distance
-        distance += 1
-    return distance
 
-
-def centralite3(G,actor):
-    distance = 0
-    en_cour = G.adj[actor]
-    set_actor_pass = {actor}
-    while en_cour != set():
-        voisin = set()
-        for acteur in en_cour:
-            for acteur_v in G.adj[acteur]:
-                if acteur_v not in set_actor_pass:
-                    voisin.add(acteur_v)
-        set_actor_pass = set_actor_pass.union(en_cour)
-        en_cour = voisin
-        if en_cour == set():
-            return distance
-        distance += 1
-    return distance
+def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
+    # test = nx.single_source_dijkstra_path(G, actor)
+    test2 = nx.single_source_dijkstra_path_length(G, actor)
+    # test =  nx.single_source_dijkstra(G,actor) 
+    max_distance = max(test2.values())
+    res = list()
+    for key in test2.keys():
+        if test2[key] == max_distance: res.append(key)
+    return (actor, res[-1], max_distance)
 
 
 def parcours(G, depart):
@@ -248,7 +222,7 @@ def parcours(G, depart):
 def centre_hollywood(G:nx.Graph) -> str:
     liste_centralite_acteur = []
     for acteur in G.nodes:
-        tmp_centralite = (acteur, centralite5(G,acteur)[0])
+        tmp_centralite = (acteur, centralite6(G,acteur)[0])
         liste_centralite_acteur.append(tmp_centralite)
     acteur_centrale = min(liste_centralite_acteur, key=lambda acteur: acteur[1])
     return acteur_centrale[0]
@@ -264,17 +238,14 @@ def centre_hollywood3(G):
 
     
     collab_fin = collaborateurs_proches(G, c1[2], index+1)
-    collab_deb = collaborateurs_proches(G,c2[2], index)
+    collab_deb = collaborateurs_proches(G,c2[2], index+1)
     for acteur in collab_fin:
         if acteur in collab_deb:
-            centralite_acteur = centralite5(G,acteur)
-            if min_dist == None or centralite_acteur[0] < min_dist:
-                min_dist = centralite_acteur[0]
-                min_acteur = centralite_acteur[1]
+            print(centralite5(G,acteur))
 
     return min_acteur
 
-def centre_hollywood4(G):
+
 
 
 
@@ -297,8 +268,9 @@ def centralite_groupe():
 
 #Juste la pour test au fur et a mesure
 if __name__ == "__main__" :
-    chemin = "./other/data_10000.txt"
+    chemin = "./other/data.txt"
     print("Hello World")
+    
     test = json_ver_nx(chemin)
     
     #print(centralite(test,"Frank Vincent"))
