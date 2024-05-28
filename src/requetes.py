@@ -193,8 +193,42 @@ def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
         # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
     return argument_dict,max_distance
 
+def centralite7(G,actor,deja_passe=set()):
+    distance = 0
+    en_cour = G.adj[actor]
+    set_actor_pass = {actor}
+    
+    deja_passe_.add((distance, actor))
+    while en_cour != set():
+        voisin = set()
+        for acteur in en_cour:
+            for acteur_v in G.adj[acteur]:
+                if acteur_v not in set_actor_pass:
+                    voisin.add(acteur_v)
+        set_actor_pass = set_actor_pass.union(en_cour)
+        en_cour = voisin
+        if en_cour == set():
+            return distance
+        distance += 1
+    return distance
 
 
+def centralite3(G,actor):
+    distance = 0
+    en_cour = G.adj[actor]
+    set_actor_pass = {actor}
+    while en_cour != set():
+        voisin = set()
+        for acteur in en_cour:
+            for acteur_v in G.adj[acteur]:
+                if acteur_v not in set_actor_pass:
+                    voisin.add(acteur_v)
+        set_actor_pass = set_actor_pass.union(en_cour)
+        en_cour = voisin
+        if en_cour == set():
+            return distance
+        distance += 1
+    return distance
 
 
 def parcours(G, depart):
@@ -224,15 +258,24 @@ def centre_hollywood3(G):
     c1 = centralite5(G, random_actor)
     c2  = centralite5(G, c1[2])
     index = c2[0] // 2
-    li_central = set()
+    min_dist = None
+    min_acteur = None
+    
 
     
     collab_fin = collaborateurs_proches(G, c1[2], index+1)
     collab_deb = collaborateurs_proches(G,c2[2], index)
     for acteur in collab_fin:
         if acteur in collab_deb:
-            li_central.add(acteur)
-    return li_central
+            centralite_acteur = centralite5(G,acteur)
+            if min_dist == None or centralite_acteur[0] < min_dist:
+                min_dist = centralite_acteur[0]
+                min_acteur = centralite_acteur[1]
+
+    return min_acteur
+
+def centre_hollywood4(G):
+
 
 
 
@@ -254,7 +297,7 @@ def centralite_groupe():
 
 #Juste la pour test au fur et a mesure
 if __name__ == "__main__" :
-    chemin = "./other/data.txt"
+    chemin = "./other/data_10000.txt"
     print("Hello World")
     test = json_ver_nx(chemin)
     
@@ -265,11 +308,9 @@ if __name__ == "__main__" :
     t=time.time()
     #print(centralite5(test,"Sissy Spacek"))
     #print(centralite(test,"Kristoff St. John"))
-    ens_centre_act = centre_hollywood3(test)
-    print("a")
-    for i in ens_centre_act:
-        print(centralite5(test,i))
-
+    print(centre_hollywood3(test))
+    
+    
     
     #result = centralite5(test,"Frank Vincent")
     #print(result)
