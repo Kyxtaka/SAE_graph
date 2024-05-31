@@ -4,6 +4,8 @@ import tkinter as Tk
 from tkinter.filedialog import askopenfilename
 from tkinter import *
 from requetes import *
+from tkinter import simpledialog
+from tkinter import messagebox
 
 #constant
 default_path = "./other/data.txt"
@@ -28,25 +30,51 @@ def getTextEntryInput(textField:Entry) -> str:
 #Toutes les les requtes se verront affichier une boites de dialogue affichant la réponse a sa fonction
 def showActorsCommonComllaborators(): #doit affichier une fentre de dialogue
     print("Collaborateurs Commun")
+    actor1Entry = simpledialog.askstring("Acteur 1","Donner le nom du premier acteur")
+    actor2Entry = simpledialog.askstring("Acteur 2","Donner le nom du deuxieme acteur")
+    actorCommonCollabData = collaborateurs_communs(GRAPH,actor1Entry,actor2Entry)
+    messagebox.showinfo("Collaborateur Communs",f"Les collaborateurs commun de '{actor1Entry}' et de '{actor2Entry}' sont : {actorCommonCollabData}.")
+
 
 def showActorNearestCollaboratorsK():
-    print("Collaborateurs proch K")
+    print("Collaborateurs proches K")
+    actorEntry = simpledialog.askstring("Acteur recherche","Donner le nom de l'acteur")
+    kIndex = simpledialog.askinteger("nombre de sauts","A combien de k pres")
+    actorNearCollabData = collaborateurs_proches(GRAPH,actorEntry,kIndex)
+    messagebox.showinfo("Collaborateur Porche",f"Les collaborateurs proches de '{actorEntry}' sont : {actorNearCollabData}.")
 
 def showIfActorNearestCollaboratorK():
-    print("Est proche K")
+    print("Est proche a K pres")
+    actor1Entry = simpledialog.askstring("Acteur recherche","Donner le nom de l'acteur recherche")
+    actor2Entry = simpledialog.askstring("Acteur depart","Donner le nom de l'acteur de depart")
+    kIndex = simpledialog.askinteger("nombre de sauts","A combien de k pres")
+    isProche = est_proche(GRAPH, actor2Entry,actor1Entry,kIndex)
+    if isProche: messagebox.showinfo("Acteur Proche",f"L'acteur '{actor1Entry}' est bien un collaborateur proche de '{actor2Entry}'.")
+    else: messagebox.showinfo("Acteur Proche",f"L'acteur '{actor1Entry}' n'est pas un collaborateur proche de '{actor2Entry}'.")
 
 def showActorsDistance():
     print("Distance")
+    actor1Entry = simpledialog.askstring("Nom acteur 1","Donner le nom du premier acteur")
+    actor2Entry = simpledialog.askstring("Nom acteur 2","Donner le nom du deuxieme acteur")
+    actorsDistanceData = distance2(GRAPH,actor1Entry,actor2Entry)
+    messagebox.showinfo("Distance",f"La distance qui separe l'acteur '{actor1Entry}' de l'acteur '{actor2Entry}' est de {actorsDistanceData}.")
 
 def showActorCentrality():
     print("Centralite")
+    actorEntry = simpledialog.askstring("Nom acteur","Donner le nom d'un acteur")
+    actorCentrality = centralite5(GRAPH, actorEntry)
+    messagebox.showinfo("Centralite",f"La centralite de l'acteur '{actorEntry}' est de {actorCentrality}.")
 
 def showHollywoodCenter():
     print("Centre Hollywood")
+    hollywoodCenterData = centre_hollywood4(GRAPH)
+    messagebox.showinfo("Centre Hollywood",f"L'acteur ce trouvent au centre est : {hollywoodCenterData}.")
 
 def showMaxDistance():
     print("Eloignement Max")
-
+    maxDistanceData = eloignement_max3(GRAPH)
+    messagebox.showinfo("Eloignement Max",f"La plus grande distance qui separe deux acteur est de {maxDistanceData}.")
+    
 # interface graphique
 def leftPanel():
     # relief='sunken'
@@ -109,7 +137,7 @@ if __name__ == "__main__" :
     # Initialisation et lancement
     print("Hello World")
     # print(load_json()) #Pour tester si on arrive bien à récuperer le ficher
-    # GRAPH = json_ver_nx(load_json()) #charge un fichier choisi par l'utilisateur et le transforme en Graph Nx
+    GRAPH = json_ver_nx(load_json()) #charge un fichier choisi par l'utilisateur et le transforme en Graph Nx
     print(GRAPH)
     afficheGUI(GUI()) #Affiche l'interface graphique
 
