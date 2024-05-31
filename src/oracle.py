@@ -146,6 +146,7 @@ if __name__ == "__main__" :
     # print(load_json()) #Pour tester si on arrive bien à récuperer le ficher
     GRAPH = json_ver_nx(load_json()) #charge un fichier choisi par l'utilisateur et le transforme en Graph Nx
     print(GRAPH)
+    GUI()
     afficheGUI() #Affiche l'interface graphique
 
 #############################################################
