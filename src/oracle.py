@@ -9,6 +9,7 @@ from requetes import *
 default_path = "./other/data.txt"
 GRAPH = None
 
+
 #function
 def load_json(dafault = default_path):
     path = askopenfilename()
