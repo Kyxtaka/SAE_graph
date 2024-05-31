@@ -104,6 +104,17 @@ def distance2(G:nx.Graph,node1:str, node2:str ) -> int:
         return lenght
     except nx.NetworkXNoPath:
         return None
+    
+def distance3(G,node1,node2,d=1):
+    if node1 == node2:
+        return 0
+    voisin_node1 = G.adj[node1]
+    if node2 in voisin_node1:
+        return d
+    for v in voisin_node1:
+        d = distance3(G,v,node2,d+1)
+    return d
+    
 
 #Q4
 def centralite(G,u):
@@ -232,18 +243,18 @@ def centre_hollywood3(G):
     c1 = centralite5(G, random_actor)
     c2  = centralite5(G, c1[2])
     index = c2[0] // 2
-    min_dist = None
-    min_acteur = None
-    
 
-    
+    ens = set()
     collab_fin = collaborateurs_proches(G, c1[2], index+1)
-    collab_deb = collaborateurs_proches(G,c2[2], index+1)
+    collab_deb = collaborateurs_proches(G,c2[2], index)
     for acteur in collab_fin:
         if acteur in collab_deb:
-            print(centralite5(G,acteur))
-
-    return min_acteur
+            print('b')
+            centre_acteur = centralite5(G,acteur)
+            ens.add(centre_acteur)
+    print('a')
+    return min(ens, key=lambda centre_acteur:centre_acteur[0])
+    
 
 
 
@@ -280,7 +291,7 @@ if __name__ == "__main__" :
     t=time.time()
     #print(centralite5(test,"Sissy Spacek"))
     #print(centralite(test,"Kristoff St. John"))
-    print(centre_hollywood3(test))
+    print(distance3(test,"Al Pacino","Diane Venora"))
     
     
     
@@ -288,7 +299,9 @@ if __name__ == "__main__" :
     #print(result)
     # print(distance2(test,"Frank Vincent","Iraj Safavi"))
     print(time.time()-t)
-    
+    t = time.time()
+    print(distance2(test,"Al Pacino","Diane Venora"))
+    print(time.time()-t)
 
     #print(test.nodes)
     #print(test.edges)
