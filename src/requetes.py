@@ -97,6 +97,17 @@ def distance2(G:nx.Graph,node1:str, node2:str ) -> int:
         return lenght
     except nx.NetworkXNoPath:
         return None
+    
+def distance3(G,node1,node2,d=1):
+    if node1 == node2:
+        return 0
+    voisin_node1 = G.adj[node1]
+    if node2 in voisin_node1:
+        return d
+    for v in voisin_node1:
+        d = distance3(G,v,node2,d+1)
+    return d
+    
 
 #Q4
 def centralite(G,u):
@@ -148,6 +159,7 @@ def centralite3(G,actor):
         distance += 1
     return distance
 
+
 def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
     max_distance:int = 0
     actor_to_check = set(node for node in G.nodes)
@@ -166,6 +178,7 @@ def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
                 if max_distance < lenght: max_distance = argument_dict[keys[0]]
         # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
     return argument_dict,max_distance
+
     
 def centralite5(G,actor):
     distance = 0
@@ -185,6 +198,7 @@ def centralite5(G,actor):
         distance += 1
     return (distance, actor, random.choice(list(en_cour)))
 
+
 def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
     # test = nx.single_source_dijkstra_path(G, actor)
     test2 = nx.single_source_dijkstra_path_length(G, actor)
@@ -196,6 +210,7 @@ def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
     return (actor, res[-1], max_distance)
 
 
+
 def centre_hollywood(G:nx.Graph) -> str:
     node_au_pif =  "Al Pacino"
     all_node = [node for node in G.nodes]
@@ -203,6 +218,7 @@ def centre_hollywood(G:nx.Graph) -> str:
     c2 = centralite6(G,c1[1])
     centrale_index = c2[2]//2
     return all_node[centrale_index], centrale_index
+
 
 #Q5
 def eloignement_max(G:nx.Graph):
@@ -221,6 +237,7 @@ def centralite_groupe():
 if __name__ == "__main__" :
     chemin = "./other/data.txt"
     print("Hello World")
+    
     test = json_ver_nx(chemin)
     
     #print(centralite(test,"Frank Vincent"))
@@ -228,6 +245,7 @@ if __name__ == "__main__" :
     #print(centralite(test,"Frank Vincent"))
     #print(time.time()-t)
     t=time.time()
+
     #result = centralite6(test,"Frank Vincent")
     #print(result)
     #print(distance2(test,"Frank Vincent", "Two pupils' fathers"))
@@ -240,7 +258,9 @@ if __name__ == "__main__" :
     print(centre_hollywood(test))
     # print(distance2(test,"Frank Vincent","Iraj Safavi"))
     print(time.time()-t)
-    
+    t = time.time()
+    print(distance2(test,"Al Pacino","Diane Venora"))
+    print(time.time()-t)
 
     #print(test.nodes)
     #print(test.edges)
