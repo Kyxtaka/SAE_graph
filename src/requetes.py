@@ -219,8 +219,11 @@ def centre_hollywood(G:nx.Graph) -> str:
     centrale_index = c2[2]//2
     return all_node[centrale_index], centrale_index
 
+
+
 def centre_hollywood3(G):
-    random_actor = random.choice(list(G.nodes))
+    #random_actor = random.choice(list(G.nodes))
+    random_actor="Burt Lancaster"
     c1 = centralite5(G, random_actor)
     c2  = centralite5(G, c1[2])
     index = c2[0] // 2
@@ -230,10 +233,31 @@ def centre_hollywood3(G):
     collab_deb = collaborateurs_proches(G,c2[2], index)
     for acteur in collab_fin:
         if acteur in collab_deb:
-            print(centralite5(G,acteur))
-
+            centre_acteur = centralite5(G,acteur)
+            ens.add(centre_acteur)
+    print(len(ens))
     return min(ens, key=lambda centre_acteur:centre_acteur[0])
 
+
+
+def centre_hollywood4(G):
+    #random_actor = random.choice(list(G.nodes))
+    random_actor="Burt Lancaster"
+    c1 = centralite5(G, random_actor)
+    c2  = centralite5(G, c1[2])
+    index = c2[0] // 2
+
+    ens = set()
+    collab_fin = collaborateurs_proches(G, c1[2], index)
+    collab_deb = collaborateurs_proches(G,c2[2], index)
+    for acteur1 in collab_fin:
+        for acteur2 in collab_deb:
+            if est_proche(G,acteur1,acteur2,1):
+                centre_acteur1 = centralite5(G,acteur1)
+                centre_acteur2 = centralite5(G,acteur2)
+                ens.add(centre_acteur1)
+                ens.add(centre_acteur2)
+                return min(ens, key=lambda centre_acteur:centre_acteur[0])[1]
 
 #Q5
 def eloignement_max(G:nx.Graph):
@@ -243,7 +267,13 @@ def eloignement_max(G:nx.Graph):
         if c[1] > distance_max:
             distance_max = c[1]
     return distance_max
-    
+
+
+def eloignement_max3(G):
+    random_actor = random.choice(list(G.nodes))
+    c1 = centralite5(G, random_actor)
+    c2  = centralite5(G, c1[2])
+    return centralite5(G,c2[2])[0]
 #Bonus
 def centralite_groupe():
     ...
@@ -270,17 +300,9 @@ if __name__ == "__main__" :
     # c2 = centralite6(test,c1[1])
     # index = c2[2]//2
     # print("centralite x2",c2[2])
-    print(centre_hollywood(test))
-    # print(distance2(test,"Frank Vincent","Iraj Safavi"))
+
+    print(centre_hollywood4(test))
     print(time.time()-t)
-    t = time.time()
-    print(distance2(test,"Al Pacino","Diane Venora"))
-    print(time.time()-t)
-
-    #print(test.nodes)
-    #print(test.edges)
-
-
 
 
 
