@@ -219,6 +219,21 @@ def centre_hollywood(G:nx.Graph) -> str:
     centrale_index = c2[2]//2
     return all_node[centrale_index], centrale_index
 
+def centre_hollywood3(G):
+    random_actor = random.choice(list(G.nodes))
+    c1 = centralite5(G, random_actor)
+    c2  = centralite5(G, c1[2])
+    index = c2[0] // 2
+
+    ens = set()
+    collab_fin = collaborateurs_proches(G, c1[2], index+1)
+    collab_deb = collaborateurs_proches(G,c2[2], index)
+    for acteur in collab_fin:
+        if acteur in collab_deb:
+            print(centralite5(G,acteur))
+
+    return min(ens, key=lambda centre_acteur:centre_acteur[0])
+
 
 #Q5
 def eloignement_max(G:nx.Graph):
