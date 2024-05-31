@@ -75,7 +75,6 @@ def showMaxDistance():
     maxDistanceData = eloignement_max3(GRAPH)
     messagebox.showinfo("Eloignement Max",f"La plus grande distance qui separe deux acteur est de {maxDistanceData}.")
     
-
 # interface graphique
 def leftPanel():
     # relief='sunken'
@@ -138,7 +137,7 @@ if __name__ == "__main__" :
     # Initialisation et lancement
     print("Hello World")
     # print(load_json()) #Pour tester si on arrive bien à récuperer le ficher
-    # GRAPH = json_ver_nx(load_json()) #charge un fichier choisi par l'utilisateur et le transforme en Graph Nx
+    GRAPH = json_ver_nx(load_json()) #charge un fichier choisi par l'utilisateur et le transforme en Graph Nx
     print(GRAPH)
     afficheGUI(GUI()) #Affiche l'interface graphique
 
