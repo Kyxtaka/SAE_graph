@@ -6,11 +6,14 @@ from tkinter import *
 from requetes import *
 from tkinter import simpledialog
 from tkinter import messagebox
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure 
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,  
+NavigationToolbar2Tk) 
 
 #constant
 default_path = "./other/data.txt"
 GRAPH = None
-
 
 #function
 def load_json(dafault = default_path):
@@ -38,7 +41,7 @@ def showActorsCommonComllaborators(): #doit affichier une fentre de dialogue
 
 def showActorNearestCollaboratorsK():
     print("Collaborateurs proches K")
-    actorEntry = simpledialog.askstring("Acteur recherche","Donner le nom de l'acteur")
+    actorEntry = simpledialog.askstring("Acteur depart","Donner le nom de l'acteur de depart")
     kIndex = simpledialog.askinteger("nombre de sauts","A combien de k pres")
     actorNearCollabData = collaborateurs_proches(GRAPH,actorEntry,kIndex)
     messagebox.showinfo("Collaborateur Porche",f"Les collaborateurs proches de '{actorEntry}' sont : {actorNearCollabData}.")
@@ -86,11 +89,11 @@ def leftPanel():
     actorCommonCollabButton.pack(padx=(20),pady=(20))
 
     #Collaborateur proche en k
-    actorNearCollabKButton = Button(sidebar, text="Collaborateurs Proches en k", command=showIfActorNearestCollaboratorK)
+    actorNearCollabKButton = Button(sidebar, text="Collaborateurs Proches en k", command=showActorNearestCollaboratorsK)
     actorNearCollabKButton.pack(padx=(20),pady=(20))
     
     #Est proche en K
-    actorIfNearCollabKButton = Button(sidebar, text="Est Proches en k", command=showActorNearestCollaboratorsK)
+    actorIfNearCollabKButton = Button(sidebar, text="Est Proches en k", command=showIfActorNearestCollaboratorK)
     actorIfNearCollabKButton.pack(padx=(20),pady=(20))
 
     #Distance entre deux acteurs
@@ -113,9 +116,13 @@ def leftPanel():
 
 def rightPanel():
     mainarea = Frame(root, bg='white', width=500, height=500)
-
-     # A compléter
-
+    fig = Figure()
+    a = fig.add_subplot(111)
+    pos = nx.spring_layout(GRAPH)
+    nx.draw(GRAPH, pos, with_labels=True,ax=a)
+    canvas = FigureCanvasTkAgg(fig, master = mainarea)
+    canvas.draw() 
+    canvas.get_tk_widget().pack(side="right", fill="both", expand=1) 
     mainarea.pack(expand=True, fill='both', side='right')
 
 def GUI(): #interface graphique utilisateur
