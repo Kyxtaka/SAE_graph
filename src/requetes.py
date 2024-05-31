@@ -27,14 +27,7 @@ def json_ver_nx(chemin:str):
         print(len(G.edges))
         print(len(G.nodes))
     return G
-
-
-        
-             
-
-            
-
-            
+          
 #Q2
 def collaborateurs_communs(graph, acteur1, acteur2):
     ens_commun = set()
@@ -166,24 +159,6 @@ def centralite3(G,actor):
         distance += 1
     return distance
 
-def centralite5(G,actor):
-    distance = 0
-    en_cour = G.adj[actor]
-    set_actor_pass = {actor}
-    while en_cour != set():
-        voisin = set()
-        for acteur in en_cour:
-            for acteur_v in G.adj[acteur]:
-                if acteur_v not in set_actor_pass:
-                    voisin.add(acteur_v)
-        set_actor_pass = set_actor_pass.union(en_cour)
-        old_en_cour = en_cour
-        en_cour = voisin
-        if en_cour == set():
-            return (distance, actor, random.choice(list(old_en_cour)))
-        distance += 1
-    return (distance, actor, random.choice(list(en_cour)))
-
 
 def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
     max_distance:int = 0
@@ -204,6 +179,25 @@ def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
         # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
     return argument_dict,max_distance
 
+    
+def centralite5(G,actor):
+    distance = 0
+    en_cour = G.adj[actor]
+    set_actor_pass = {actor}
+    while en_cour != set():
+        voisin = set()
+        for acteur in en_cour:
+            for acteur_v in G.adj[acteur]:
+                if acteur_v not in set_actor_pass:
+                    voisin.add(acteur_v)
+        set_actor_pass = set_actor_pass.union(en_cour)
+        old_en_cour = en_cour
+        en_cour = voisin
+        if en_cour == set():
+            return (distance, actor, random.choice(list(old_en_cour)))
+        distance += 1
+    return (distance, actor, random.choice(list(en_cour)))
+
 
 def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
     # test = nx.single_source_dijkstra_path(G, actor)
@@ -216,52 +210,14 @@ def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
     return (actor, res[-1], max_distance)
 
 
-def parcours(G, depart):
-    pile = [depart]
-    atteint = [depart]
-    while (len(pile)>0):
-        noeud_courant = pile.pop()
-        print(noeud_courant)
-        for voisin in G[noeud_courant]:
-            if not voisin in atteint:
-                pile.append(voisin)
-                atteint.append(voisin)
-        return atteint
-
-
 
 def centre_hollywood(G:nx.Graph) -> str:
-    liste_centralite_acteur = []
-    for acteur in G.nodes:
-        tmp_centralite = (acteur, centralite6(G,acteur)[0])
-        liste_centralite_acteur.append(tmp_centralite)
-    acteur_centrale = min(liste_centralite_acteur, key=lambda acteur: acteur[1])
-    return acteur_centrale[0]
-
-def centre_hollywood3(G):
-    random_actor = random.choice(list(G.nodes))
-    c1 = centralite5(G, random_actor)
-    c2  = centralite5(G, c1[2])
-    index = c2[0] // 2
-
-    ens = set()
-    collab_fin = collaborateurs_proches(G, c1[2], index+1)
-    collab_deb = collaborateurs_proches(G,c2[2], index)
-    for acteur in collab_fin:
-        if acteur in collab_deb:
-            print('b')
-            centre_acteur = centralite5(G,acteur)
-            ens.add(centre_acteur)
-    print('a')
-    return min(ens, key=lambda centre_acteur:centre_acteur[0])
-    
-
-
-
-
-
-
-    
+    node_au_pif =  "Al Pacino"
+    all_node = [node for node in G.nodes]
+    c1 = centralite6(G,node_au_pif)
+    c2 = centralite6(G,c1[1])
+    centrale_index = c2[2]//2
+    return all_node[centrale_index], centrale_index
 
 
 #Q5
@@ -272,7 +228,7 @@ def eloignement_max(G:nx.Graph):
         if c[1] > distance_max:
             distance_max = c[1]
     return distance_max
-
+    
 #Bonus
 def centralite_groupe():
     ...
@@ -289,14 +245,17 @@ if __name__ == "__main__" :
     #print(centralite(test,"Frank Vincent"))
     #print(time.time()-t)
     t=time.time()
-    #print(centralite5(test,"Sissy Spacek"))
-    #print(centralite(test,"Kristoff St. John"))
-    print(distance3(test,"Al Pacino","Diane Venora"))
-    
-    
-    
+
+    #result = centralite6(test,"Frank Vincent")
+    #print(result)
+    #print(distance2(test,"Frank Vincent", "Two pupils' fathers"))
     #result = centralite5(test,"Frank Vincent")
     #print(result)
+    # c1 = centralite6(test,"Al Pacino")
+    # c2 = centralite6(test,c1[1])
+    # index = c2[2]//2
+    # print("centralite x2",c2[2])
+    print(centre_hollywood(test))
     # print(distance2(test,"Frank Vincent","Iraj Safavi"))
     print(time.time()-t)
     t = time.time()
