@@ -80,8 +80,9 @@ def afficheGUI(root:Tk):
 if __name__ == "__main__" :
     # Initialisation et lancement
     print("Hello World")
-    print(load_json()) #Pour tester si on arrive bien à récuperer le ficher
+    # print(load_json()) #Pour tester si on arrive bien à récuperer le ficher
     GRAPH = json_ver_nx(load_json()) #charge un fichier choisi par l'utilisateur et le transforme en Graph Nx
+    print(GRAPH)
     afficheGUI(GUI()) #Affiche l'interface graphique
 
 #############################################################
