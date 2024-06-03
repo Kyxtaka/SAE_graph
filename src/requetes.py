@@ -264,8 +264,8 @@ def eloignement_max(G:nx.Graph):
     distance_max = 0
     for acteur in G.nodes:
         c = centralite(G, acteur)
-        if c[1] > distance_max:
-            distance_max = c[1]
+        if c > distance_max:
+            distance_max = c
     return distance_max
 
 
@@ -280,7 +280,7 @@ def centralite_groupe():
 
 #Juste la pour test au fur et a mesure
 if __name__ == "__main__" :
-    chemin = "./other/data.txt"
+    chemin = "./other/data_10000.txt"
     print("Hello World")
     
     test = json_ver_nx(chemin)
@@ -301,7 +301,7 @@ if __name__ == "__main__" :
     # index = c2[2]//2
     # print("centralite x2",c2[2])
 
-    print(centre_hollywood4(test))
+    print(eloignement_max3(test))
     print(time.time()-t)
 
 
