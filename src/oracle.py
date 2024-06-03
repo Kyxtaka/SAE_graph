@@ -66,7 +66,7 @@ def showActorCentrality():
     print("Centralite")
     actorEntry = simpledialog.askstring("Nom acteur","Donner le nom d'un acteur")
     actorCentrality = centralite5(GRAPH, actorEntry)
-    messagebox.showinfo("Centralite",f"La centralite de l'acteur '{actorEntry}' est de {actorCentrality}.")
+    messagebox.showinfo("Centralite",f"La centralite de l'acteur '{actorEntry}' est de {actorCentrality[0]}.")
 
 def showHollywoodCenter():
     print("Centre Hollywood")
