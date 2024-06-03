@@ -44,6 +44,7 @@ def collaborateurs_proches(G,u,k):
         G: le graphe
         u: le sommet de départ
         k: la distance depuis u
+        
     """
    
     if u not in G.nodes:
@@ -62,6 +63,7 @@ def collaborateurs_proches(G,u,k):
     return collaborateurs
 
 def est_proche(G ,acteur1, acteur2, k):
+    
     collab = collaborateurs_proches(G,acteur1,k)
     if collab != None:
         return acteur2 in collab
@@ -181,22 +183,23 @@ def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
 
     
 def centralite5(G,actor):
+    if actor not in G:
+        return None
     distance = 0
     en_cour = G.adj[actor]
     set_actor_pass = {actor}
     while en_cour != set():
         voisin = set()
+        distance += 1
+        set_actor_pass = set_actor_pass.union(en_cour)
         for acteur in en_cour:
             for acteur_v in G.adj[acteur]:
                 if acteur_v not in set_actor_pass:
                     voisin.add(acteur_v)
-        set_actor_pass = set_actor_pass.union(en_cour)
         old_en_cour = en_cour
         en_cour = voisin
-        if en_cour == set():
-            return (distance, actor, random.choice(list(old_en_cour)))
-        distance += 1
-    return (distance, actor, random.choice(list(en_cour)))
+        
+    return (distance, actor, random.choice(list(old_en_cour)))
 
 
 def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
@@ -280,7 +283,7 @@ def centralite_groupe():
 
 #Juste la pour test au fur et a mesure
 if __name__ == "__main__" :
-    chemin = "./other/data_10000.txt"
+    chemin = "./other/data.txt"
     print("Hello World")
     
     test = json_ver_nx(chemin)
@@ -301,7 +304,7 @@ if __name__ == "__main__" :
     # index = c2[2]//2
     # print("centralite x2",c2[2])
 
-    print(eloignement_max3(test))
+    print(centralite5(test,"Al Pacino"))
     print(time.time()-t)
 
 
