@@ -197,8 +197,7 @@ def centralite5(G,actor):
                 if acteur_v not in set_actor_pass:
                     voisin.add(acteur_v)
         old_en_cour = en_cour
-        en_cour = voisin
-        
+        en_cour = voisin      
     return (distance, actor, random.choice(list(old_en_cour)))
 
 
@@ -275,8 +274,7 @@ def eloignement_max(G:nx.Graph):
 def eloignement_max3(G):
     random_actor = random.choice(list(G.nodes))
     c1 = centralite5(G, random_actor)
-    c2  = centralite5(G, c1[2])
-    return centralite5(G,c2[2])[0]
+    return centralite5(G,c1[2])[0]
 #Bonus
 def centralite_groupe():
     ...
@@ -304,7 +302,7 @@ if __name__ == "__main__" :
     # index = c2[2]//2
     # print("centralite x2",c2[2])
 
-    print(centralite5(test,"Al Pacino"))
+    print(eloignement_max3(test))
     print(time.time()-t)
 
 
