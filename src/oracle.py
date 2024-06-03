@@ -132,7 +132,7 @@ def GUI(): #interface graphique utilisateur
     root.geometry('1000x500')
     root.title("The Beacon Finder")
     leftPanel()
-    rightPanel()
+    #rightPanel()
     root.mainloop()
     return root
 
