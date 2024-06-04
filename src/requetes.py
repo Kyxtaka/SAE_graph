@@ -44,6 +44,7 @@ def collaborateurs_proches(G,u,k):
         G: le graphe
         u: le sommet de départ
         k: la distance depuis u
+        
     """
    
     if u not in G.nodes:
@@ -62,6 +63,7 @@ def collaborateurs_proches(G,u,k):
     return collaborateurs
 
 def est_proche(G ,acteur1, acteur2, k):
+    
     collab = collaborateurs_proches(G,acteur1,k)
     if collab != None:
         return acteur2 in collab
@@ -181,22 +183,22 @@ def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
 
     
 def centralite5(G,actor):
+    if actor not in G:
+        return None
     distance = 0
     en_cour = G.adj[actor]
     set_actor_pass = {actor}
     while en_cour != set():
         voisin = set()
+        distance += 1
+        set_actor_pass = set_actor_pass.union(en_cour)
         for acteur in en_cour:
             for acteur_v in G.adj[acteur]:
                 if acteur_v not in set_actor_pass:
                     voisin.add(acteur_v)
-        set_actor_pass = set_actor_pass.union(en_cour)
         old_en_cour = en_cour
-        en_cour = voisin
-        if en_cour == set():
-            return (distance, actor, random.choice(list(old_en_cour)))
-        distance += 1
-    return (distance, actor, random.choice(list(en_cour)))
+        en_cour = voisin      
+    return (distance, actor, random.choice(list(old_en_cour)))
 
 
 def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
@@ -389,18 +391,17 @@ def eloignement_max(G:nx.Graph):
     distance_max = 0
     for acteur in G.nodes:
         c = centralite(G, acteur)
-        if c[1] > distance_max:
-            distance_max = c[1]
+        if c > distance_max:
+            distance_max = c
     return distance_max
 
 
 def eloignement_max3(G):
     random_actor = random.choice(list(G.nodes))
     c1 = centralite5(G, random_actor)
-    t=time.time()
     c2  = centralite5(G, c1[2])
-    print(time.time()-t)
     return centralite5(G,c2[2])[0]
+
 #Bonus
 def centralite_groupe():
     ...
