@@ -209,6 +209,28 @@ def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
         if test2[key] == max_distance: res.append(key)
     return (actor, res[-1], max_distance)
 
+def centralite7(G,actor,distance_max=None):
+    distance = 0
+    en_cour = G.adj[actor]
+    set_actor_pass = {actor}
+    while en_cour != set():
+        
+        voisin = set()
+        for acteur in en_cour:
+            for acteur_v in G.adj[acteur]:
+                if acteur_v not in set_actor_pass:
+                    voisin.add(acteur_v)
+        set_actor_pass = set_actor_pass.union(en_cour)
+        old_en_cour = en_cour
+        en_cour = voisin
+        if en_cour == set():
+            return (distance, actor, random.choice(list(old_en_cour)))
+        if distance == distance_max:
+            return None
+        distance += 1
+        
+    return (distance, actor, random.choice(list(en_cour)))
+
 
 
 def centre_hollywood(G:nx.Graph) -> str:
@@ -259,6 +281,109 @@ def centre_hollywood4(G):
                 ens.add(centre_acteur2)
                 return min(ens, key=lambda centre_acteur:centre_acteur[0])[1]
 
+def ens_collab_a_k_distance(G,u,k):
+    if u not in G.nodes:
+        print(u,"est un illustre inconnu")
+        return None
+    collaborateurs = set()
+    collaborateurs_directs = set()
+    collaborateurs.add(u)
+    #print(collaborateurs)
+    for i in range(k):
+        collaborateurs_directs = set()
+        for c in collaborateurs:
+            for voisin in G.adj[c]:
+                    collaborateurs_directs.add(voisin)
+        collaborateurs = collaborateurs.union(collaborateurs_directs)
+    return collaborateurs_directs
+
+def centre_hollywood5(G):
+    random_actor = random.choice(list(G.nodes))
+    
+    c = centralite7(G, random_actor)
+    c1  = centralite7(G, c[2])
+    c2  = centralite7(G, c1[2])
+
+
+    eloignemnt = eloignement_max3(G)
+    if eloignemnt % 2 == 0:
+        index = c2[0] //2 
+        collab_c1_a_index = ens_collab_a_k_distance(G,c1[2],index)
+        collab_c2_a_index = ens_collab_a_k_distance(G,c2[2],index)
+        ens = set()
+        for acteur1 in collab_c1_a_index:
+            for acteur2 in  collab_c2_a_index:
+                if acteur1 == acteur2:
+                    ens.add(acteur2)
+        #return len(ens)
+        for acteur in ens:
+            centralite_acteur = centralite7(G,acteur,index)
+            if centralite_acteur != None:
+                return acteur
+        
+        
+    else:
+        print("b")
+        index = eloignemnt // 2
+        ens = set()
+        collab_fin = collaborateurs_proches(G, c1[2], index)
+        collab_deb = collaborateurs_proches(G,c2[2], index)
+        for acteur1 in collab_fin:
+            for acteur2 in collab_deb:
+                if est_proche(G,acteur1,acteur2,1):
+                    centre_acteur1 = centralite5(G,acteur1)
+                    centre_acteur2 = centralite5(G,acteur2)
+                    ens.add(centre_acteur1)
+                    ens.add(centre_acteur2)
+                    return min(ens, key=lambda centre_acteur:centre_acteur[0])[1]
+                
+def centre_hollywood6(G):
+    random_actor = random.choice(list(G.nodes))
+    
+    c = centralite7(G, random_actor)
+    c1  = centralite7(G, c[2])
+    c2  = centralite7(G, c1[2])
+    if c2[0] % 2 == 0:
+        print("a")
+        index = c2[0] //2 
+        collab_c1_a_index = ens_collab_a_k_distance(G,c1[2],index)
+        collab_c2_a_index = ens_collab_a_k_distance(G,c2[2],index)
+
+        random_actor = random.choice(list(G.nodes))
+        c3 = centralite7(G, random_actor)
+        c4  = centralite7(G, c3[2])
+        collab_c3_a_index = ens_collab_a_k_distance(G,c3[2],index)
+        collab_c4_a_index = ens_collab_a_k_distance(G,c4[2],index)
+
+        ens = set()
+        for acteur1 in collab_c1_a_index:
+            if acteur1 in collab_c2_a_index and acteur1 in collab_c3_a_index and acteur1 in collab_c4_a_index:
+                ens.add(acteur1)
+        #return len(ens)
+        for acteur in ens:
+            centralite_acteur = centralite7(G,acteur,index)
+            if centralite_acteur != None:
+                return acteur
+        
+        
+    else:
+        print("b")
+        index = c2[0] // 2
+        ens = set()
+        collab_fin = ens_collab_a_k_distance(G,c1[2],index)
+        collab_deb = ens_collab_a_k_distance(G,c2[2],index)
+
+
+        for acteur1 in collab_fin:
+            for acteur2 in collab_deb:
+                if acteur1 != acteur2 and est_proche(G,acteur1,acteur2,1):
+                    centre_acteur1 = centralite7(G,acteur1)
+                    centre_acteur2 = centralite7(G,acteur2)
+                    ens.add(centre_acteur1)
+                    ens.add(centre_acteur2)
+                    return min(ens, key=lambda centre_acteur:centre_acteur[0])[1]
+            
+    
 #Q5
 def eloignement_max(G:nx.Graph):
     distance_max = 0
@@ -272,7 +397,9 @@ def eloignement_max(G:nx.Graph):
 def eloignement_max3(G):
     random_actor = random.choice(list(G.nodes))
     c1 = centralite5(G, random_actor)
+    t=time.time()
     c2  = centralite5(G, c1[2])
+    print(time.time()-t)
     return centralite5(G,c2[2])[0]
 #Bonus
 def centralite_groupe():
@@ -289,22 +416,25 @@ if __name__ == "__main__" :
     #t=time.time()
     #print(centralite(test,"Frank Vincent"))
     #print(time.time()-t)
+    #print(centre_hollywood5(test))
+    """liste5 = []
+    liste6 = []
+    i = 0
+    while i < 100:
+        liste5.append(centre_hollywood5(test))
+        liste6.append(centre_hollywood6(test))
+        i+=1
+    moyenne5 = sum(liste5)/len(liste5)
+    moyenne6 = sum(liste6)/len(liste6)
+    print(moyenne5, moyenne6)
+    """
+
+
+
     t=time.time()
-
-    #result = centralite6(test,"Frank Vincent")
-    #print(result)
-    #print(distance2(test,"Frank Vincent", "Two pupils' fathers"))
-    #result = centralite5(test,"Frank Vincent")
-    #print(result)
-    # c1 = centralite6(test,"Al Pacino")
-    # c2 = centralite6(test,c1[1])
-    # index = c2[2]//2
-    # print("centralite x2",c2[2])
-
-    print(centre_hollywood4(test))
+    print(centre_hollywood6(test))
+    eloignement_max3(test)
     print(time.time()-t)
-
-
 
     
  
