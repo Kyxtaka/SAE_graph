@@ -59,18 +59,18 @@ def showActorsDistance():
     print("Distance")
     actor1Entry = simpledialog.askstring("Nom acteur 1","Donner le nom du premier acteur")
     actor2Entry = simpledialog.askstring("Nom acteur 2","Donner le nom du deuxieme acteur")
-    actorsDistanceData = distance2(GRAPH,actor1Entry,actor2Entry)
+    actorsDistanceData = distance(GRAPH,actor1Entry,actor2Entry)
     messagebox.showinfo("Distance",f"La distance qui separe l'acteur '{actor1Entry}' de l'acteur '{actor2Entry}' est de {actorsDistanceData}.")
 
 def showActorCentrality():
     print("Centralite")
     actorEntry = simpledialog.askstring("Nom acteur","Donner le nom d'un acteur")
-    actorCentrality = centralite5(GRAPH, actorEntry)
+    actorCentrality = centralite7(GRAPH, actorEntry)
     messagebox.showinfo("Centralite",f"La centralite de l'acteur '{actorEntry}' est de {actorCentrality}.")
 
 def showHollywoodCenter():
     print("Centre Hollywood")
-    hollywoodCenterData = centre_hollywood4(GRAPH)
+    hollywoodCenterData = centre_hollywood6(GRAPH)
     messagebox.showinfo("Centre Hollywood",f"L'acteur ce trouvent au centre est : {hollywoodCenterData}.")
 
 def showMaxDistance():

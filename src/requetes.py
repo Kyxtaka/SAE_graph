@@ -30,6 +30,16 @@ def json_ver_nx(chemin:str):
           
 #Q2
 def collaborateurs_communs(graph, acteur1, acteur2):
+    """
+    Trouve les collaborateurs communs entre deux acteurs dans un graphe.
+    Args:
+        graph (networkx.Graph): Le graphe représentant les relations entre les acteurs.
+        acteur1 (str): Le nom du premier acteur.
+        acteur2 (str): Le nom du deuxième acteur.
+
+    Returns:
+        set: Un ensemble contenant les identifiants des collaborateurs communs entre acteur1 et acteur2.
+    """   
     ens_commun = set()
     for collab in graph.adj[acteur1]:
         if collab in graph.adj[acteur2]:
@@ -74,8 +84,21 @@ def distance_naive(G ,acteur1, acteur2):
     return k
 
 def distance(G ,acteur1, acteur2):
+    """"
+    Calcule la distance minimale entre deux acteurs dans un graphe.
 
+    Args:
+        G (networkx.Graph): Le graphe représentant les relations entre les acteurs.
+        acteur1 (str): Le nom du premier acteur.
+        acteur2 (str): Le nom du deuxième acteur.
+
+    Returns:
+        int: La distance minimale entre acteur1 et acteur2, ou None si acteur1 ou acteur2 n'existe pas dans le graphe.
+    """    
     if acteur1 not in G.nodes:
+        print(acteur1,"est un illustre inconnu")
+        return None
+    if acteur2 not in G.nodes:
         print(acteur1,"est un illustre inconnu")
         return None
     collaborateurs = set()
@@ -111,6 +134,10 @@ def distance3(G,node1,node2,d=1):
 
 #Q4
 def centralite(G,u):
+    
+    if u not in G.nodes:
+        print(u,"est un illustre inconnu")
+        return None
     collaborateurs = set()
     collaborateurs.add(u)
     #print(collaborateurs)
@@ -210,6 +237,19 @@ def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
     return (actor, res[-1], max_distance)
 
 def centralite7(G,actor,distance_max=None):
+    """
+    Calcule la centralité d'un acteur dans un graphe.
+
+    Args:
+        G (networkx.Graph): Le graphe représentant les relations entre les acteurs.
+        actor (str): Le nom de l'acteur central.
+        distance_max (int, optional): La distance maximale à explorer. Si None, explore jusqu'à épuisement des voisins. Defaults to None.
+
+    Returns:
+        tuple: Un tuple (distance, actor, voisin_aleatoire) où distance est la distance finale atteinte, actor est l'acteur d'origine,
+               et un acteur aléatoire parmi les derniers voisins visités.
+               Retourne None si la distance maximale est atteinte sans exploration complète.
+    """   
     distance = 0
     en_cour = G.adj[actor]
     set_actor_pass = {actor}
@@ -263,8 +303,7 @@ def centre_hollywood3(G):
 
 
 def centre_hollywood4(G):
-    #random_actor = random.choice(list(G.nodes))
-    random_actor="Burt Lancaster"
+    random_actor = random.choice(list(G.nodes))
     c1 = centralite5(G, random_actor)
     c2  = centralite5(G, c1[2])
     index = c2[0] // 2
@@ -282,6 +321,18 @@ def centre_hollywood4(G):
                 return min(ens, key=lambda centre_acteur:centre_acteur[0])[1]
 
 def ens_collab_a_k_distance(G,u,k):
+    """
+    Trouve l'ensemble des collaborateurs situés à une distance k d'un acteur donné dans un graphe.
+
+    Args:
+        G (networkx.Graph): Le graphe représentant les relations entre les acteurs.
+        u (str): Le nom de l'acteur de départ.
+        k (int): La distance à laquelle rechercher les collaborateurs.
+
+    Returns:
+        set: Un ensemble contenant les identifiants des collaborateurs situés à une distance k de u,
+             ou None si l'acteur u n'existe pas dans le graphe.
+    """  
     if u not in G.nodes:
         print(u,"est un illustre inconnu")
         return None
@@ -336,52 +387,87 @@ def centre_hollywood5(G):
                     ens.add(centre_acteur1)
                     ens.add(centre_acteur2)
                     return min(ens, key=lambda centre_acteur:centre_acteur[0])[1]
-                
-def centre_hollywood6(G):
+
+
+def centre_hollywood_distance_max_pair(G, c1, c2):
+    """
+    Trouve l'acteur central dans un graphe lorsque la distance maximale est paire.
+
+    Args:
+        G (networkx.Graph): Le graphe représentant les relations entre les acteurs.
+        c1 (tuple): Un tuple (distance, acteur, acteur_central) obtenu à partir de la fonction `centralite7`.
+        c2 (tuple): Un tuple (distance, acteur, acteur_central) obtenu à partir de la fonction `centralite7`.
+
+    Returns:
+        str: L'identifiant de l'acteur central trouvé.
+    """    
+    index = c2[0] //2 
+    collab_c1_a_index = ens_collab_a_k_distance(G,c1[2],index)
+    collab_c2_a_index = ens_collab_a_k_distance(G,c2[2],index)
+
     random_actor = random.choice(list(G.nodes))
-    
+    c3 = centralite7(G, random_actor)
+    c4  = centralite7(G, c3[2])
+    collab_c3_a_index = ens_collab_a_k_distance(G,c3[2],index)
+    collab_c4_a_index = ens_collab_a_k_distance(G,c4[2],index)
+
+    ens = set()
+    for acteur1 in collab_c1_a_index:
+        if acteur1 in collab_c2_a_index and acteur1 in collab_c3_a_index and acteur1 in collab_c4_a_index:
+            ens.add(acteur1)
+
+    for acteur in ens:
+        centralite_acteur = centralite7(G,acteur,index)
+        if centralite_acteur != None:
+            return acteur
+
+
+def centre_hollywood_distance_max_impair(G, c1, c2):
+    """
+    Trouve l'acteur central dans un graphe lorsque la distance maximale est impaire.
+
+    Args:
+        G (networkx.Graph): Le graphe représentant les relations entre les acteurs.
+        c1 (tuple): Un tuple (distance, acteur, acteur_central) obtenu à partir de la fonction `centralite7`.
+        c2 (tuple): Un tuple (distance, acteur, acteur_central) obtenu à partir de la fonction `centralite7`.
+
+    Returns:
+        str: L'identifiant de l'acteur central trouvé.
+    """    
+    index = c2[0] // 2
+    ens = set()
+    collab_fin = ens_collab_a_k_distance(G,c1[2],index)
+    collab_deb = ens_collab_a_k_distance(G,c2[2],index)
+    for acteur1 in collab_fin:
+        for acteur2 in collab_deb:
+            if acteur1 != acteur2 and est_proche(G,acteur1,acteur2,1):
+                centre_acteur1 = centralite7(G,acteur1)
+                centre_acteur2 = centralite7(G,acteur2)
+                ens.add(centre_acteur1)
+                ens.add(centre_acteur2)
+                return min(ens, key=lambda centre_acteur:centre_acteur[0])[1]
+            
+
+def centre_hollywood6(G):
+    """
+    Trouve l'acteur central du graphe.
+
+    Args:
+        G (networkx.Graph): Le graphe représentant les relations entre les acteurs.
+
+    Returns:
+        str: L'identifiant de l'acteur central trouvé par l'algorithme.
+    """   
+    random_actor = random.choice(list(G.nodes))
+    # calcule de la distance maximale entre deux acteurs
     c = centralite7(G, random_actor)
     c1  = centralite7(G, c[2])
     c2  = centralite7(G, c1[2])
     if c2[0] % 2 == 0:
-        print("a")
-        index = c2[0] //2 
-        collab_c1_a_index = ens_collab_a_k_distance(G,c1[2],index)
-        collab_c2_a_index = ens_collab_a_k_distance(G,c2[2],index)
-
-        random_actor = random.choice(list(G.nodes))
-        c3 = centralite7(G, random_actor)
-        c4  = centralite7(G, c3[2])
-        collab_c3_a_index = ens_collab_a_k_distance(G,c3[2],index)
-        collab_c4_a_index = ens_collab_a_k_distance(G,c4[2],index)
-
-        ens = set()
-        for acteur1 in collab_c1_a_index:
-            if acteur1 in collab_c2_a_index and acteur1 in collab_c3_a_index and acteur1 in collab_c4_a_index:
-                ens.add(acteur1)
-        #return len(ens)
-        for acteur in ens:
-            centralite_acteur = centralite7(G,acteur,index)
-            if centralite_acteur != None:
-                return acteur
-        
-        
+        return centre_hollywood_distance_max_pair(G,c1,c2)
     else:
-        print("b")
-        index = c2[0] // 2
-        ens = set()
-        collab_fin = ens_collab_a_k_distance(G,c1[2],index)
-        collab_deb = ens_collab_a_k_distance(G,c2[2],index)
-
-
-        for acteur1 in collab_fin:
-            for acteur2 in collab_deb:
-                if acteur1 != acteur2 and est_proche(G,acteur1,acteur2,1):
-                    centre_acteur1 = centralite7(G,acteur1)
-                    centre_acteur2 = centralite7(G,acteur2)
-                    ens.add(centre_acteur1)
-                    ens.add(centre_acteur2)
-                    return min(ens, key=lambda centre_acteur:centre_acteur[0])[1]
+        print("a")
+        return centre_hollywood_distance_max_impair(G,c1,c2)
             
     
 #Q5
@@ -395,11 +481,18 @@ def eloignement_max(G:nx.Graph):
 
 
 def eloignement_max3(G):
+    """
+    Calcule l'éloignement maximal d'un graphe.
+
+    Args:
+        G (networkx.Graph): Le graphe représentant les relations entre les acteurs.
+
+    Returns:
+        int: La distance maximale obtenue après une série de calculs de centralité.
+    """    
     random_actor = random.choice(list(G.nodes))
     c1 = centralite5(G, random_actor)
-    t=time.time()
     c2  = centralite5(G, c1[2])
-    print(time.time()-t)
     return centralite5(G,c2[2])[0]
 #Bonus
 def centralite_groupe():
@@ -432,9 +525,11 @@ if __name__ == "__main__" :
 
 
     t=time.time()
-    print(centre_hollywood6(test))
-    eloignement_max3(test)
+    a = centre_hollywood6(test)
     print(time.time()-t)
+    print(a)
+    print(centralite7(test,a))
+    
 
     
  
