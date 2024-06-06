@@ -135,7 +135,18 @@ def distance3(G,node1,node2,d=1):
     
 
 #Q4
-def centralite(G,u):
+
+def centralite(G:nx.Graph,actor:str) -> int:
+    distances_paths = set()
+    actor_to_check = set(node for node in G.nodes)
+    actor_to_check.remove(actor)
+    for node in actor_to_check:
+        lenght=distance2(G, actor,node)
+        if lenght != None :distances_paths.add(lenght)
+        # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
+    return max(distances_paths)
+
+def centralite2(G,u):
     
     if u not in G.nodes:
         print(u,"est un illustre inconnu")
@@ -161,15 +172,7 @@ def centralite(G,u):
 
     return distance
 
-def centralite2(G:nx.Graph,actor:str) -> int:
-    distances_paths = set()
-    actor_to_check = set(node for node in G.nodes)
-    actor_to_check.remove(actor)
-    for node in actor_to_check:
-        lenght=distance2(G, actor,node)
-        if lenght != None :distances_paths.add(lenght)
-        # print(f"calculating centralite ==> {actor} to {node} lengh is = {lenght}")
-    return max(distances_paths)
+
 
 def centralite3(G,actor):
     distance = 0
@@ -258,21 +261,23 @@ def centralite7(G,actor,distance_max=None):
     while en_cour != set():
         
         voisin = set()
+        distance += 1
+        set_actor_pass = set_actor_pass.union(en_cour)
         for acteur in en_cour:
             for acteur_v in G.adj[acteur]:
                 if acteur_v not in set_actor_pass:
                     voisin.add(acteur_v)
-        set_actor_pass = set_actor_pass.union(en_cour)
+        
         old_en_cour = en_cour
         en_cour = voisin
         if en_cour == set():
             return (distance, actor, random.choice(list(old_en_cour)))
         if distance == distance_max:
             return None
-        distance += 1
+        
         
     return (distance, actor, random.choice(list(en_cour)))
-
+ 
 
 
 def centre_hollywood(G:nx.Graph) -> str:
@@ -303,7 +308,6 @@ def centre_hollywood3(G):
     return min(ens, key=lambda centre_acteur:centre_acteur[0])
 
 
-
 def centre_hollywood4(G):
     random_actor = random.choice(list(G.nodes))
     c1 = centralite5(G, random_actor)
@@ -321,6 +325,7 @@ def centre_hollywood4(G):
                 ens.add(centre_acteur1)
                 ens.add(centre_acteur2)
                 return min(ens, key=lambda centre_acteur:centre_acteur[0])[1]
+
 
 def ens_collab_a_k_distance(G,u,k):
     """
@@ -493,9 +498,9 @@ def eloignement_max3(G):
         int: La distance maximale obtenue après une série de calculs de centralité.
     """    
     random_actor = random.choice(list(G.nodes))
-    c1 = centralite5(G, random_actor)
-    c2  = centralite5(G, c1[2])
-    return centralite5(G,c2[2])[0]
+    c1 = centralite7(G, random_actor)
+    c2  = centralite7(G, c1[2])
+    return centralite7(G,c2[2])
 
 #Bonus
 def centralite_groupe():
@@ -528,10 +533,12 @@ if __name__ == "__main__" :
 
 
     t=time.time()
-    a = centre_hollywood6(test)
+    #print(eloignement_max3(test))
+    #a = centralite7(test,"S. Joesoef")
+    print(centre_hollywood6(test))
     print(time.time()-t)
-    print(a)
-    print(centralite7(test,a))
+    #print(a)
+    
     
 
     
