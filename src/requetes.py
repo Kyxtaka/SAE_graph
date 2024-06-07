@@ -272,7 +272,7 @@ def centralite5(G,actor):
                     voisin.add(acteur_v)
         old_en_cour = en_cour
         en_cour = voisin      
-    return (distance, actor, random.choice(list(old_en_cour)))
+    return (distance, actor, random.choice(list(old_en_cour)))[0]
 
 
 def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
@@ -560,6 +560,7 @@ def centre_hollywood6(G):
 def eloignement_max(G:nx.Graph):
     """
     Complexité : O(N**4)
+    temps d'éxecution : 375.80036187171936 temps pour data_1000.txt
     """
     distance_max = 0
     for acteur in G.nodes: #O(N)
@@ -580,6 +581,7 @@ def eloignement_max3(G):
         int: La distance maximale obtenue après une série de calculs de centralité.
     
     Complexité : O(N**3)
+    temps d'éxecution : 
     """    
     random_actor = random.choice(list(G.nodes))
     c1 = centralite7(G, random_actor)
@@ -592,7 +594,7 @@ def centralite_groupe():
 
 #Juste la pour test au fur et a mesure
 if __name__ == "__main__" :
-    chemin = "./other/data.txt"
+    chemin = "./other/data_1000.txt"
     print("Hello World")
     
     test = json_ver_nx(chemin)
@@ -680,7 +682,7 @@ if __name__ == "__main__" :
 
     t=time.time()
     print(eloignement_max3(test))
-    print(time.time()-t, "temps pour eloignement_max")
+    print(time.time()-t, "temps pour eloignement_max3")
     
     #print(eloignement_max3(test))
     
