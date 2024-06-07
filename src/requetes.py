@@ -160,6 +160,16 @@ def distance3(G,node1,node2,d=1):
     
 
 #Q4
+def premiere_version_centralite(G:nx.Graph, u) -> int:
+    """
+    complexité: O(N**4)
+    temps d'éxecution : 9s avec une centralite de 4 pour data_10000
+    """
+    liste_distance = []
+    for acteur in G.nodes: #O(N)
+        liste_distance.append(distance(G,u,acteur))
+    return max(liste_distance)
+
 
 def centralite(G:nx.Graph,actor:str) -> int:
     """
@@ -332,6 +342,20 @@ def centralite7(G,actor,distance_max=None):
 
 
 def centre_hollywood(G:nx.Graph) -> str:
+    """
+    complexité : O(N**5)
+    temps d'éxecutiuon : plus de 1000 secnondes sur data_100.txt 
+    """
+    liste_centralite_acteur = []
+    for acteur in G.nodes: #O(N)
+        tmp_centralite = tuple([acteur, premiere_version_centralite(G,acteur)]) 
+        liste_centralite_acteur.append(tmp_centralite)
+    acteur_centrale = min(liste_centralite_acteur, key=lambda acteur: acteur[1])
+    return acteur_centrale[0]
+
+
+
+def centre_hollywood2(G:nx.Graph) -> str:
     """
     Complexité : ? ################################
     fonctionne pas 
@@ -560,7 +584,7 @@ def centre_hollywood6(G):
 def eloignement_max(G:nx.Graph):
     """
     Complexité : O(N**4)
-    temps d'éxecution : 375.80036187171936 temps pour data_1000.txt
+    temps d'éxecution : 375s pour data_1000.txt
     """
     distance_max = 0
     for acteur in G.nodes: #O(N)
@@ -581,7 +605,7 @@ def eloignement_max3(G):
         int: La distance maximale obtenue après une série de calculs de centralité.
     
     Complexité : O(N**3)
-    temps d'éxecution : 
+    temps d'éxecution : 16s pour data.txt, le temps d'éxecution varie selon la variable random_actor
     """    
     random_actor = random.choice(list(G.nodes))
     c1 = centralite7(G, random_actor)
@@ -628,6 +652,10 @@ if __name__ == "__main__" :
 
     ################### centralite
     
+    t=time.time()
+    print(premiere_version_centralite(test,'Lynne Marta'))
+    print(time.time()-t, "temps pour premiere_version_centralite avec centralite à 4 sur data_10000.txt")
+
     #t=time.time()
     #print(centralite(test,'Veriano Genesi'))
     #print(time.time()-t, "temps pour centralite avec centralite à 4 sur data_10000.txt")
@@ -659,6 +687,10 @@ if __name__ == "__main__" :
     ################### centre_hollywood
 
     #t=time.time()
+    #print(centre_hollywood(test))
+    #print(time.time()-t, "temps pour centre_hollywood ")
+
+    #t=time.time()
     #print(centre_hollywood3(test))
     #print(time.time()-t, "temps pour centre_hollywood3")
 
@@ -676,13 +708,13 @@ if __name__ == "__main__" :
 
     ################### eloignement_max
     
-    t=time.time()
-    print(eloignement_max(test))
-    print(time.time()-t, "temps pour eloignement_max")
+    #t=time.time()
+    #print(eloignement_max(test))
+    #print(time.time()-t, "temps pour eloignement_max")
 
-    t=time.time()
-    print(eloignement_max3(test))
-    print(time.time()-t, "temps pour eloignement_max3")
+    #t=time.time()
+    #print(eloignement_max3(test))
+    #print(time.time()-t, "temps pour eloignement_max3")
     
     #print(eloignement_max3(test))
     
