@@ -75,7 +75,7 @@ def showHollywoodCenter():
 
 def showMaxDistance():
     print("Eloignement Max")
-    maxDistanceData = eloignement_max3(GRAPH)
+    maxDistanceData = eloignement_max3(GRAPH)[0]
     messagebox.showinfo("Eloignement Max",f"La plus grande distance qui separe deux acteur est de {maxDistanceData}.")
     
 # interface graphique
