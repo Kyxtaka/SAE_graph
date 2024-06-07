@@ -70,8 +70,8 @@ def showActorCentrality():
 
 def showHollywoodCenter():
     print("Centre Hollywood")
-    hollywoodCenterData = centre_hollywood6(GRAPH)
-    messagebox.showinfo("Centre Hollywood",f"L'acteur ce trouvent au centre est : {hollywoodCenterData}.")
+    hollywoodCenterData = centre_hollywood6(GRAPH)[0]
+    messagebox.showinfo("Centre Hollywood",f"L'acteur qui ce trouvent au centre est : {hollywoodCenterData}.")
 
 def showMaxDistance():
     print("Eloignement Max")
@@ -124,6 +124,7 @@ def rightPanel():
     canvas.draw() 
     canvas.get_tk_widget().pack(side="right", fill="both", expand=1) 
     mainarea.pack(expand=True, fill='both', side='right')
+
 
 def GUI(): #interface graphique utilisateur
     #A finir

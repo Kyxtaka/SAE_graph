@@ -576,7 +576,6 @@ def centre_hollywood6(G):
     if c2[0] % 2 == 0:
         return centre_hollywood_distance_max_pair(G,c1,c2) #O(N**4)
     else:
-        print("a")
         return centre_hollywood_distance_max_impair(G,c1,c2) #O(N**6)
             
     
