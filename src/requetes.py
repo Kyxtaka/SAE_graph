@@ -135,7 +135,7 @@ def distance(G ,acteur1, acteur2):
 
 def distance2(G:nx.Graph,node1:str, node2:str ) -> int:
     """
-    Complexité : ?
+    Complexité : O(N)
     temps d'éxécution max: 0.00192s pour data.txt
     """
     try:
@@ -146,7 +146,7 @@ def distance2(G:nx.Graph,node1:str, node2:str ) -> int:
     
 def distance3(G,node1,node2,d=1):
     """
-    complexité : ?
+    complexité : O(N**2)
     fonction ne fonctionne pas car ne prend pas en compte les cycle et revient en arrière
     """
     if node1 == node2:
@@ -173,7 +173,7 @@ def premiere_version_centralite(G:nx.Graph, u) -> int:
 
 def centralite(G:nx.Graph,actor:str) -> int:
     """
-    complexité : O(N*complexité disatnce2) voir ############################
+    complexité : O(N*2) voir ############################
     temps d'éxécution max:11s avec une centralite de 4 pour data_10000
     """
     distances_paths = set()
@@ -240,7 +240,7 @@ def centralite3(G,actor):
 
 def centralite4(G:nx.Graph,actor:str,argument_dict:dict) -> list[dict, int]:
     """
-    complexité : O(N*complexité distance 2 ) ################################
+    complexité : O(N*2) ################################
     temps d'éxécution max: ? je comprend pas ce qu'il faut mettre pour le paramètre argument_dict ###########################
     """
     max_distance:int = 0
@@ -287,7 +287,7 @@ def centralite5(G,actor):
 
 def centralite6(G:nx.Graph,actor:str) -> list[str,str,int]:
     """
-    complexité : voir compléxité de nx.single_source_dijkstra_path_length ###############################
+    complexité : O(N) ###############################
     temps d'éxécution max: 10 s avec centralite de l'acteur à 15 sur data.txt
     """
     # test = nx.single_source_dijkstra_path(G, actor)
@@ -357,7 +357,7 @@ def centre_hollywood(G:nx.Graph) -> str:
 
 def centre_hollywood2(G:nx.Graph) -> str:
     """
-    Complexité : ? ################################
+    Complexité : O(N**3)
     fonctionne pas 
     """
     node_au_pif =  random.choice(list(G.nodes))
